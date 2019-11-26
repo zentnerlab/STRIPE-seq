@@ -6,6 +6,8 @@ setwd("/Users/gzentner/Desktop/tsrexplorer/yeast/STRIPE-seq/Gabe_yeast_work/TSR_
 slic_tsrs_reduced <- GenomicRanges::reduce(c(exp@experiment$TSRs$SLIC_CAGE_100ng_1,exp@experiment$TSRs$SLIC_CAGE_100ng_2),
                                            drop.empty.ranges = FALSE, min.gapwidth = 40, ignore.strand = FALSE, with.revmap = FALSE)
 
+export.bed(slic_tsrs_reduced, con = "SLIC_CAGE_TSRs_merged.bed")
+
 # # Other merged TSR sets potentially of interest
 # 
 # # 100 ng STRIPE TSRs

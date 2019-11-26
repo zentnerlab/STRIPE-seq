@@ -114,7 +114,14 @@ setwd("/Users/gzentner/Desktop/tsrexplorer/yeast/STRIPE-seq/Gabe_yeast_work/YPD_
 # Normalize TSS counts
 exp <- count_normalization(exp, data_type = "tss", n_samples = 1, threshold = 3, samples = stripe)
 
-# Generate a hierarchically clustered heatmap
+# Generate a combinbed TSS correlation plot
+p <- plot_correlation(exp, data_type = "tss") +
+    ggplot2::theme_bw() +
+    ggplot2::theme(text = element_text(size = 6))
+
+ggsave("tss_correlation.png", plot = p, device = "png", type = "cairo", height = 12, width = 12)
+
+# Generate a hierarchically clustered TSS heatmap
 p <- plot_correlation(exp, data_type = "tss", correlation_plot = "hierarchical", col = viridis(256), correlation_metric = "pearson")
 
 pdf("tss_correlation_hierarchical.pdf", height = 10, width = 10)
@@ -199,13 +206,60 @@ p <- plot_max_utr(max)
 ggsave("max_utr.pdf", plot = p, device = cairo_pdf, height = 4, width = 4)
 
 # Export normalized TSS bedGraphs
-export.bedGraph(exp@counts$TSSs$cpm$S288C_100ng_1[strand(exp@counts$TSSs$cpm$S288C_100ng_1) == "+"], "S288C_100ng_1_+.bedgraph")
-export.bedGraph(exp@counts$TSSs$cpm$S288C_100ng_1[strand(exp@counts$TSSs$cpm$S288C_100ng_1) == "-"], "S288C_100ng_1_-.bedgraph")
+
+# 50 ng
+export.bedGraph(exp@counts$TSSs$cpm$S288C_50ng_1[strand(exp@counts$TSSs$cpm$S288C_50ng_1) == "+"], 
+                "../bedgraphs/S288C_50ng_1_+.bedgraph")
+export.bedGraph(exp@counts$TSSs$cpm$S288C_50ng_1[strand(exp@counts$TSSs$cpm$S288C_50ng_1) == "-"], 
+                "../bedgraphs/S288C_50ng_1_-.bedgraph")
+export.bedGraph(exp@counts$TSSs$cpm$S288C_50ng_2[strand(exp@counts$TSSs$cpm$S288C_50ng_2) == "+"], 
+                "../bedgraphs/S288C_50ng_2_+.bedgraph")
+export.bedGraph(exp@counts$TSSs$cpm$S288C_50ng_2[strand(exp@counts$TSSs$cpm$S288C_50ng_2) == "-"], 
+                "../bedgraphs/S288C_50ng_2_-.bedgraph")
+export.bedGraph(exp@counts$TSSs$cpm$S288C_50ng_3[strand(exp@counts$TSSs$cpm$S288C_50ng_3) == "+"], 
+                "../bedgraphs/S288C_50ng_3_+.bedgraph")
+export.bedGraph(exp@counts$TSSs$cpm$S288C_50ng_3[strand(exp@counts$TSSs$cpm$S288C_50ng_3) == "-"], 
+                "../bedgraphs/S288C_50ng_3_-.bedgraph")
+
+# 100 ng
+export.bedGraph(exp@counts$TSSs$cpm$S288C_100ng_1[strand(exp@counts$TSSs$cpm$S288C_100ng_1) == "+"], 
+                "../bedgraphs/S288C_100ng_1_+.bedgraph")
+export.bedGraph(exp@counts$TSSs$cpm$S288C_100ng_1[strand(exp@counts$TSSs$cpm$S288C_100ng_1) == "-"], 
+                "../bedgraphs/S288C_100ng_1_-.bedgraph")
+export.bedGraph(exp@counts$TSSs$cpm$S288C_100ng_2[strand(exp@counts$TSSs$cpm$S288C_100ng_2) == "+"], 
+                "../bedgraphs/S288C_100ng_2_+.bedgraph")
+export.bedGraph(exp@counts$TSSs$cpm$S288C_100ng_2[strand(exp@counts$TSSs$cpm$S288C_100ng_2) == "-"], 
+                "../bedgraphs/S288C_100ng_2_-.bedgraph")
+export.bedGraph(exp@counts$TSSs$cpm$S288C_100ng_3[strand(exp@counts$TSSs$cpm$S288C_100ng_3) == "+"], 
+                "../bedgraphs/S288C_100ng_3_+.bedgraph")
+export.bedGraph(exp@counts$TSSs$cpm$S288C_100ng_3[strand(exp@counts$TSSs$cpm$S288C_100ng_3) == "-"], 
+                "../bedgraphs/S288C_100ng_3_-.bedgraph")
+
+# 250 ng
+export.bedGraph(exp@counts$TSSs$cpm$S288C_250ng_1[strand(exp@counts$TSSs$cpm$S288C_250ng_1) == "+"], 
+                "../bedgraphs/S288C_250ng_1_+.bedgraph")
+export.bedGraph(exp@counts$TSSs$cpm$S288C_250ng_1[strand(exp@counts$TSSs$cpm$S288C_250ng_1) == "-"], 
+                "../bedgraphs/S288C_250ng_1_-.bedgraph")
+export.bedGraph(exp@counts$TSSs$cpm$S288C_250ng_2[strand(exp@counts$TSSs$cpm$S288C_250ng_2) == "+"], 
+                "../bedgraphs/S288C_250ng_2_+.bedgraph")
+export.bedGraph(exp@counts$TSSs$cpm$S288C_250ng_2[strand(exp@counts$TSSs$cpm$S288C_250ng_2) == "-"], 
+                "../bedgraphs/S288C_250ng_2_-.bedgraph")
+export.bedGraph(exp@counts$TSSs$cpm$S288C_250ng_3[strand(exp@counts$TSSs$cpm$S288C_250ng_3) == "+"], 
+                "../bedgraphs/S288C_250ng_3_+.bedgraph")
+export.bedGraph(exp@counts$TSSs$cpm$S288C_250ng_3[strand(exp@counts$TSSs$cpm$S288C_250ng_3) == "-"], 
+                "../bedgraphs/S288C_250ng_3_-.bedgraph")
 
 # Normalize TSR counts
 exp <- count_normalization(exp, data_type = "tsr", threshold = 3, n_samples = 1, samples = stripe)
 
-# Generate a hierarchically clustered heatmap
+# Generate a combinbed TSR correlation plot
+p <- plot_correlation(exp, data_type = "tsr") +
+    ggplot2::theme_bw() +
+    ggplot2::theme(text = element_text(size = 6))
+
+ggsave("tsr_correlation.png", plot = p, device = "png", type = "cairo", height = 12, width = 12)
+
+# Generate a hierarchically clustered TSR heatmap
 p <- plot_correlation(exp, data_type = "tsr", correlation_plot = "hierarchical", col = viridis(256), correlation_metric = "pearson")
 
 pdf("tsr_correlation_hierarchical.pdf", height = 7, width = 7)
@@ -261,19 +315,51 @@ setwd("/Users/gzentner/Desktop/tsrexplorer/yeast/STRIPE-seq/Gabe_yeast_work/CAGE
 exp <- count_normalization(exp, data_type = "tss", n_samples = 1, threshold = 3, samples = all)
 
 # Export normalized TSS bedGraphs
-export.bedGraph(exp@counts$TSSs$cpm$SLIC_CAGE_100ng_1[strand(exp@counts$TSSs$cpm$SLIC_CAGE_100ng_1) == "+"], "SLIC_CAGE_100ng_1_+.bedgraph")
-export.bedGraph(exp@counts$TSSs$cpm$SLIC_CAGE_100ng_1[strand(exp@counts$TSSs$cpm$SLIC_CAGE_100ng_1) == "-"], "SLIC_CAGE_100ng_1_-.bedgraph")
 
-export.bedGraph(exp@counts$TSSs$cpm$nanoCAGE_500ng_1[strand(exp@counts$TSSs$cpm$nanoCAGE_500ng_1) == "+"], "nanoCAGE_500ng_1_+.bedgraph")
-export.bedGraph(exp@counts$TSSs$cpm$nanoCAGE_500ng_1[strand(exp@counts$TSSs$cpm$nanoCAGE_500ng_1) == "-"], "nanoCAGE_500ng_1_-.bedgraph")
+# SLIC-CAGE
+export.bedGraph(exp@counts$TSSs$cpm$SLIC_CAGE_100ng_1[strand(exp@counts$TSSs$cpm$SLIC_CAGE_100ng_1) == "+"], 
+                "../bedgraphs/SLIC_CAGE_100ng_1_+.bedgraph")
+export.bedGraph(exp@counts$TSSs$cpm$SLIC_CAGE_100ng_1[strand(exp@counts$TSSs$cpm$SLIC_CAGE_100ng_1) == "-"], 
+                "../bedgraphs/SLIC_CAGE_100ng_1_-.bedgraph")
 
-export.bedGraph(exp@counts$TSSs$cpm$nanoCAGE_25ng_1[strand(exp@counts$TSSs$cpm$nanoCAGE_25ng_1) == "+"], "nanoCAGE_25ng_1_+.bedgraph")
-export.bedGraph(exp@counts$TSSs$cpm$nanoCAGE_25ng_1[strand(exp@counts$TSSs$cpm$nanoCAGE_25ng_1) == "-"], "nanoCAGE_25ng_1_-.bedgraph")
+export.bedGraph(exp@counts$TSSs$cpm$SLIC_CAGE_100ng_2[strand(exp@counts$TSSs$cpm$SLIC_CAGE_100ng_2) == "+"], 
+                "../bedgraphs/SLIC_CAGE_100ng_2_+.bedgraph")
+export.bedGraph(exp@counts$TSSs$cpm$SLIC_CAGE_100ng_2[strand(exp@counts$TSSs$cpm$SLIC_CAGE_100ng_2) == "-"], 
+                "../bedgraphs/SLIC_CAGE_100ng_2_-.bedgraph")
+
+# nanoCAGE 500 ng
+export.bedGraph(exp@counts$TSSs$cpm$nanoCAGE_500ng_1[strand(exp@counts$TSSs$cpm$nanoCAGE_500ng_1) == "+"], 
+                "../bedgraphs/nanoCAGE_500ng_1_+.bedgraph")
+export.bedGraph(exp@counts$TSSs$cpm$nanoCAGE_500ng_1[strand(exp@counts$TSSs$cpm$nanoCAGE_500ng_1) == "-"], 
+                "../bedgraphs/nanoCAGE_500ng_1_-.bedgraph")
+
+export.bedGraph(exp@counts$TSSs$cpm$nanoCAGE_500ng_2[strand(exp@counts$TSSs$cpm$nanoCAGE_500ng_2) == "+"], 
+                "../bedgraphs/nanoCAGE_500ng_2_+.bedgraph")
+export.bedGraph(exp@counts$TSSs$cpm$nanoCAGE_500ng_2[strand(exp@counts$TSSs$cpm$nanoCAGE_500ng_2) == "-"], 
+                "../bedgraphs/nanoCAGE_500ng_2_-.bedgraph")
+
+# nanoCAGE 25 ng
+export.bedGraph(exp@counts$TSSs$cpm$nanoCAGE_25ng_1[strand(exp@counts$TSSs$cpm$nanoCAGE_25ng_1) == "+"], 
+                "../bedgraphs/nanoCAGE_25ng_1_+.bedgraph")
+export.bedGraph(exp@counts$TSSs$cpm$nanoCAGE_25ng_1[strand(exp@counts$TSSs$cpm$nanoCAGE_25ng_1) == "-"], 
+                "../bedgraphs/nanoCAGE_25ng_1_-.bedgraph")
+
+export.bedGraph(exp@counts$TSSs$cpm$nanoCAGE_25ng_2[strand(exp@counts$TSSs$cpm$nanoCAGE_25ng_2) == "+"], 
+                "../bedgraphs/nanoCAGE_25ng_2_+.bedgraph")
+export.bedGraph(exp@counts$TSSs$cpm$nanoCAGE_25ng_2[strand(exp@counts$TSSs$cpm$nanoCAGE_25ng_2) == "-"], 
+                "../bedgraphs/nanoCAGE_25ng_2_-.bedgraph")
 
 # Normalize TSR counts
 exp <- count_normalization(exp, data_type = "tsr", threshold = 3, n_samples = 1, samples = all)
 
-# Generate a hierarchically clustered heatmap
+# Generate a combinbed TSR correlation plot
+p <- plot_correlation(exp, data_type = "tsr", correlation_metric = "spearman") +
+    ggplot2::theme_bw() +
+    ggplot2::theme(text = element_text(size = 6))
+
+ggsave("tsr_correlation.png", plot = p, device = "png", type = "cairo", height = 20, width = 20)
+
+# Generate a hierarchically clustered TSR heatmap
 p <- plot_correlation(exp, data_type = "tsr", correlation_plot = "hierarchical", col = viridis(256), correlation_metric = "spearman")
 
 pdf("tsr_correlation_hierarchical.pdf", height = 7, width = 7)
@@ -301,7 +387,7 @@ setwd("/Users/gzentner/Desktop/tsrexplorer/yeast/STRIPE-seq/Gabe_yeast_work/diam
 # Normalize TSS counts
 exp <- count_normalization(exp, data_type = "tss", n_samples = 1, threshold = 3, samples = diamide)
 
-# Generate a hierarchically clustered heatmap
+# Generate a hierarchically clustered TSS heatmap
 p <- plot_correlation(exp, data_type = "tss", correlation_plot = "hierarchical", col = viridis(256), correlation_metric = "pearson")
 
 pdf("tss_correlation_hierarchical.pdf", height = 3.5, width = 4)
@@ -350,13 +436,30 @@ p <- plot_max_utr(max)
 ggsave("max_utr.pdf", plot = p, device = cairo_pdf, height = 4, width = 4)
 
 # Export normalized TSS bedGraphs
-export.bedGraph(exp@counts$TSSs$cpm$S288C_diamide_100ng_1[strand(exp@counts$TSSs$cpm$S288C_diamide_100ng_1) == "+"], "S288C_diamide_100ng_1_+.bedgraph")
-export.bedGraph(exp@counts$TSSs$cpm$S288C_diamide_100ng_1[strand(exp@counts$TSSs$cpm$S288C_diamide_100ng_1) == "-"], "S288C_diamide_100ng_1_-.bedgraph")
+export.bedGraph(exp@counts$TSSs$cpm$S288C_diamide_100ng_1[strand(exp@counts$TSSs$cpm$S288C_diamide_100ng_1) == "+"], 
+                "../bedgraphs/S288C_diamide_100ng_1_+.bedgraph")
+export.bedGraph(exp@counts$TSSs$cpm$S288C_diamide_100ng_1[strand(exp@counts$TSSs$cpm$S288C_diamide_100ng_1) == "-"], 
+                "../bedgraphs/S288C_diamide_100ng_1_-.bedgraph")
+export.bedGraph(exp@counts$TSSs$cpm$S288C_diamide_100ng_2[strand(exp@counts$TSSs$cpm$S288C_diamide_100ng_2) == "+"], 
+                "../bedgraphs/S288C_diamide_100ng_2_+.bedgraph")
+export.bedGraph(exp@counts$TSSs$cpm$S288C_diamide_100ng_2[strand(exp@counts$TSSs$cpm$S288C_diamide_100ng_2) == "-"], 
+                "../bedgraphs/S288C_diamide_100ng_2_-.bedgraph")
+export.bedGraph(exp@counts$TSSs$cpm$S288C_diamide_100ng_3[strand(exp@counts$TSSs$cpm$S288C_diamide_100ng_3) == "+"], 
+                "../bedgraphs/S288C_diamide_100ng_3_+.bedgraph")
+export.bedGraph(exp@counts$TSSs$cpm$S288C_diamide_100ng_3[strand(exp@counts$TSSs$cpm$S288C_diamide_100ng_3) == "-"], 
+                "../bedgraphs/S288C_diamide_100ng_3_-.bedgraph")
 
 # Normalize TSR counts
 exp <- count_normalization(exp, data_type = "tsr", threshold = 3, n_samples = 1, samples = diamide)
 
-# Generate a hierarchically clustered heatmap
+# Generate a combinbed TSR correlation plot
+p <- plot_correlation(exp, data_type = "tsr") +
+    ggplot2::theme_bw() +
+    ggplot2::theme(text = element_text(size = 6))
+
+ggsave("tsr_correlation.png", plot = p, device = "png", type = "cairo", height = 8, width = 8)
+
+# Generate a hierarchically clustered TSR heatmap
 p <- plot_correlation(exp, data_type = "tsr", correlation_plot = "hierarchical", col = viridis(256), correlation_metric = "pearson")
 
 pdf("tsr_correlation_hierarchical.pdf", height = 7, width = 7)
