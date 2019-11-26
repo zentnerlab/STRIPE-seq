@@ -90,6 +90,14 @@ cage <- c("S288C_100ng_1","S288C_100ng_2","S288C_100ng_3",
           "nanoCAGE_500ng_1","nanoCAGE_500ng_2",
           "nanoCAGE_25ng_1","nanoCAGE_25ng_2")
 
+# All YPD STRIPE-seq and CAGE samples
+all <- c("S288C_50ng_1","S288C_50ng_2","S288C_50ng_3",
+         "S288C_100ng_1","S288C_100ng_2","S288C_100ng_3",
+         "S288C_250ng_1","S288C_250ng_2","S288C_250ng_3",
+         "SLIC_CAGE_100ng_1","SLIC_CAGE_100ng_2",
+         "nanoCAGE_500ng_1","nanoCAGE_500ng_2",
+         "nanoCAGE_25ng_1","nanoCAGE_25ng_2")
+
 # YPD 100 ng and YPD + diamide STRIPE-seq samples
 diamide <- c("S288C_100ng_1","S288C_100ng_2","S288C_100ng_3",
              "S288C_diamide_100ng_1","S288C_diamide_100ng_2","S288C_diamide_100ng_3")
@@ -109,7 +117,7 @@ exp <- count_normalization(exp, data_type = "tss", n_samples = 1, threshold = 3,
 # Generate a hierarchically clustered heatmap
 p <- plot_correlation(exp, data_type = "tss", correlation_plot = "hierarchical", col = viridis(256), correlation_metric = "pearson")
 
-pdf("tss_correlation_hierarchical.pdf", height = 3.5, width = 4)
+pdf("tss_correlation_hierarchical.pdf", height = 10, width = 10)
 p
 dev.off()
 
@@ -250,7 +258,7 @@ ggsave("tsr_average_plot.png", plot = p, device = "png", type = "cairo", height 
 setwd("/Users/gzentner/Desktop/tsrexplorer/yeast/STRIPE-seq/Gabe_yeast_work/CAGE/")
 
 # Normalize TSS counts
-exp <- count_normalization(exp, data_type = "tss", n_samples = 1, threshold = 3, samples = cage)
+exp <- count_normalization(exp, data_type = "tss", n_samples = 1, threshold = 3, samples = all)
 
 # Export normalized TSS bedGraphs
 export.bedGraph(exp@counts$TSSs$cpm$SLIC_CAGE_100ng_1[strand(exp@counts$TSSs$cpm$SLIC_CAGE_100ng_1) == "+"], "SLIC_CAGE_100ng_1_+.bedgraph")
@@ -263,7 +271,7 @@ export.bedGraph(exp@counts$TSSs$cpm$nanoCAGE_25ng_1[strand(exp@counts$TSSs$cpm$n
 export.bedGraph(exp@counts$TSSs$cpm$nanoCAGE_25ng_1[strand(exp@counts$TSSs$cpm$nanoCAGE_25ng_1) == "-"], "nanoCAGE_25ng_1_-.bedgraph")
 
 # Normalize TSR counts
-exp <- count_normalization(exp, data_type = "tsr", threshold = 3, n_samples = 1, samples = cage)
+exp <- count_normalization(exp, data_type = "tsr", threshold = 3, n_samples = 1, samples = all)
 
 # Generate a hierarchically clustered heatmap
 p <- plot_correlation(exp, data_type = "tsr", correlation_plot = "hierarchical", col = viridis(256), correlation_metric = "spearman")
