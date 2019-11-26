@@ -1,36 +1,17 @@
 library(ComplexHeatmap)
+library(multcomp)
 
 setwd("/Users/gzentner/Desktop/tsrexplorer/yeast/STRIPE-seq/Gabe_yeast_work/TSR_complexity/")
 
 # Combine SLIC-CAGE TSRs
-slic_tsrs_reduced <- GenomicRanges::reduce(c(exp@experiment$TSRs$SLIC_CAGE_100ng_1,exp@experiment$TSRs$SLIC_CAGE_100ng_2),
+# min.gapwidth = 40 merges TSRs less than 40 bp apart
+slic_tsrs_reduced_40 <- GenomicRanges::reduce(c(exp@experiment$TSRs$SLIC_CAGE_100ng_1,exp@experiment$TSRs$SLIC_CAGE_100ng_2),
                                            drop.empty.ranges = FALSE, min.gapwidth = 40, ignore.strand = FALSE, with.revmap = FALSE)
 
-export.bed(slic_tsrs_reduced, con = "SLIC_CAGE_TSRs_merged.bed")
+# Filter out TSRs less than 5 bp in length
+slic_tsrs_reduced_40_filtered_5 <- slic_tsrs_reduced_40[GenomicRanges::width(slic_tsrs_reduced_40) >= 5]
 
-# # Other merged TSR sets potentially of interest
-# 
-# # 100 ng STRIPE TSRs
-# stripe_100ng_tsrs_reduced <- GenomicRanges::reduce(c(exp@counts$TSRs$cpm$S288C_100ng_1,exp@counts$TSRs$cpm$S288C_100ng_2,exp@counts$TSRs$cpm$S288C_100ng_3),
-#                                              drop.empty.ranges = FALSE, min.gapwidth = 40, ignore.strand = FALSE, with.revmap = FALSE)
-# 
-# #TSRs from all CAGE methods
-# all_cage_tsrs_reduced <- GenomicRanges::reduce(unlist(GRangesList(CAGE_TSRs)), drop.empty.ranges = FALSE, min.gapwidth = 40, 
-#                                                ignore.strand = FALSE, with.revmap = FALSE)
-# 
-# #TSRs from STRIPE-seq and CAGE methods
-# stripe_cage_tsrs_reduced <- GenomicRanges::reduce(c(unlist(GRangesList(CAGE_TSRs)),
-#                                                         exp@counts$TSRs$cpm$S288C_50ng_1,
-#                                                         exp@counts$TSRs$cpm$S288C_50ng_2,
-#                                                         exp@counts$TSRs$cpm$S288C_50ng_3,
-#                                                         exp@counts$TSRs$cpm$S288C_100ng_1,
-#                                                         exp@counts$TSRs$cpm$S288C_100ng_2,
-#                                                         exp@counts$TSRs$cpm$S288C_100ng_3,
-#                                                         exp@counts$TSRs$cpm$S288C_250ng_1,
-#                                                         exp@counts$TSRs$cpm$S288C_250ng_2,
-#                                                         exp@counts$TSRs$cpm$S288C_250ng_3), 
-#                                                   drop.empty.ranges = FALSE, min.gapwidth = 40, 
-#                                                   ignore.strand = FALSE, with.revmap = FALSE)
+export.bed(slic_tsrs_reduced_40_filtered_5, con = "slic_tsrs_reduced_40_filtered_5.bed")
 
 samples_for_complexity <- list(exp@experiment$TSSs$S288C_50ng_1,exp@experiment$TSSs$S288C_50ng_2,exp@experiment$TSSs$S288C_50ng_3,
                                exp@experiment$TSSs$S288C_100ng_1,exp@experiment$TSSs$S288C_100ng_2,exp@experiment$TSSs$S288C_100ng_3,
@@ -45,7 +26,7 @@ samples_for_complexity <- list(exp@experiment$TSSs$S288C_50ng_1,exp@experiment$T
                 "nanoCAGE_500ng_1","nanoCAGE_500ng_2",
                 "nanoCAGE_25ng_1","nanoCAGE_25ng_2"))
 
-tsr_complexity <- map(samples_for_complexity, ~ countOverlaps(slic_tsrs_reduced, .x) %>%
+tsr_complexity <- map(samples_for_complexity, ~ countOverlaps(slic_tsrs_reduced_40_filtered_5, .x) %>%
                           as.data.frame %>%
                           dplyr::rename(., nTSSs = .))
 
@@ -91,3 +72,8 @@ Heatmap(corr_matrix, col = viridis(256), heatmap_legend_param = list(title = "Sp
             }
         )
 dev.off()
+
+# ANOVA
+res.aov <- aov(log2 ~ sample, data = nTSSs)
+
+summary(glht(res.aov, linfct = mcp(sample = "Tukey")))
