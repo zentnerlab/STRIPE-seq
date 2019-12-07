@@ -114,24 +114,24 @@ exp <- tsr_explorer(full_TSSs_set,full_TSR_set)
 ### YPD input variation replicate analysis ###
 ##############################################
 
-if (!dir.exists(file.path(baseDir, "yeast_work/YPD_STRIPE/"))){
-  print("Creating directory 'yeast_work/YPD_STRIPE' and changing working directory...")
-  dir.create(file.path(baseDir, "yeast_work/YPD_STRIPE/"))
-  setwd(file.path(baseDir, "yeast_work/YPD_STRIPE/"))
+if (!dir.exists("yeast_work/YPD_STRIPE/")){
+  message("Creating directory 'yeast_work/YPD_STRIPE' and changing working directory...")
+  dir.create("yeast_work/YPD_STRIPE/")
+  setwd("yeast_work/YPD_STRIPE/")
 } else {
-  print("Directory 'yeast_work/YPD_STRIPE' already exisits, changing working directory...")
-  setwd(file.path(baseDir, "yeast_work/YPD_STRIPE/"))
+  message("Directory 'yeast_work/YPD_STRIPE' already exisits, changing working directory...")
+  setwd("yeast_work/YPD_STRIPE/")
 }
 
 # Normalize TSS counts
 exp <- count_normalization(exp, data_type = "tss", threshold = 3, n_samples = 1, samples = stripe)
 
 # Generate a combinbed TSS correlation plot
-p <- plot_correlation(exp, data_type = "tss") +
+p <- plot_correlation(exp, data_type = "tss", font_size = 2, pt_size = 0.5) +
     ggplot2::theme_bw() +
-    ggplot2::theme(text = element_text(size = 6))
+    ggplot2::theme(text = element_text(size = 4))
 
-ggsave("tss_correlation.png", plot = p, device = "png", type = "cairo", height = 12, width = 12)
+ggsave("tss_correlation.png", plot = p, device = "png", type = "cairo", height = 5, width = 5)
 
 # Generate a hierarchically clustered TSS heatmap with correlation values displayed
 corr_matrix <- find_correlation(exp, data_type = "tss", correlation_metric = "pearson")
