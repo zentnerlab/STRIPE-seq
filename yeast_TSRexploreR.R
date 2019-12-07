@@ -153,27 +153,27 @@ exp <- annotate_features(exp, annotation_file = annotation, data_type = "tss", f
 thresh <- explore_thresholds(exp, annotation_file = annotation, feature_type = "transcript", max_threshold = 25, 
                                  upstream = 250, downstream = 100, samples = stripe)
 
-p <- plot_threshold_exploration(thresh, ncol = 3, point_size = 0.5, sample_order = stripe) +
+p <- plot_threshold_exploration(thresh, ncol = 3, point_size = 1.5, sample_order = stripe) +
     geom_vline(xintercept = 3, lty = 2) +
-    theme(legend.key.size = unit(0.3, "cm"), text = element_text(size = 5))
+    theme(legend.key.size = unit(0.8, "cm"), text = element_text(size = 12))
 
-ggsave("tss_thresholds.pdf", plot = p, device = cairo_pdf, height = 3, width = 5)
+ggsave("tss_thresholds.pdf", plot = p, device = cairo_pdf, height = 5, width = 10)
 
 # Determine TSS distribution relative to genomic features
 tss_distribution <- genomic_distribution(exp, data_type = "tss", threshold = 3, samples = stripe)
 
 p <- plot_genomic_distribution(tss_distribution, sample_order = stripe) +
-    ggplot2::theme(text = element_text(size = 6), legend.key.size = unit(0.4, "cm"))
+    ggplot2::theme(text = element_text(size = 14), legend.key.size = unit(0.8, "cm"))
 
-ggsave("tss_genomic_distribution.pdf", plot = p, device = cairo_pdf, height = 3, width = 4)
+ggsave("tss_genomic_distribution.pdf", plot = p, device = cairo_pdf, height = 6, width = 6)
 
 genomic_dist <- genomic_distribution(exp, data_type = "tss", threshold = 3, quantiles = 5, 
                                      samples = "S288C_100ng_1")
 
 p <- plot_genomic_distribution(genomic_dist, sample_order = stripe) +
-    ggplot2::theme(text = element_text(size = 6), legend.key.size = unit(0.4, "cm"))
+    ggplot2::theme(text = element_text(size = 14), legend.key.size = unit(0.8, "cm"))
 
-ggsave("tss_genomic_distribution_quantiles.pdf", plot = p, device = cairo_pdf, height = 4, width = 4)
+ggsave("tss_genomic_distribution_quantiles.pdf", plot = p, device = cairo_pdf, height = 4.5, width = 6)
 
 # Plot number of promoter-proximal features with a TSS
 features <- detect_features(exp, data_type = "tss", feature_type = "transcript", threshold = 3, 
