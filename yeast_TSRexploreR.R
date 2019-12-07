@@ -179,10 +179,10 @@ ggsave("tss_genomic_distribution_quantiles.pdf", plot = p, device = cairo_pdf, h
 features <- detect_features(exp, data_type = "tss", feature_type = "transcript", threshold = 3, 
                             samples = stripe)
 
-p <- plot_detected_features(features, ncol = 3) +
-    ggplot2::theme(text = element_text(size = 5), legend.key.size = unit(0.4, "cm"))
+p <- plot_detected_features(features, ncol = 3, width = 0.75) +
+    ggplot2::theme(text = element_text(size = 14), legend.key.size = unit(0.8, "cm"))
 
-ggsave("tss_feature_plot.pdf", plot = p, device = cairo_pdf, height = 5, width = 6)
+ggsave("tss_feature_plot.pdf", plot = p, device = cairo_pdf, height = 4, width = 8)
 
 # Generate TSS density plots
 p <- plot_average(exp, data_type = "tss", threshold = 3, samples = "S288C_100ng_1", upstream = 1000, downstream = 1000) +
