@@ -13,15 +13,11 @@ library(enrichplot)
 # Pull latest dev version of tsrexplorer
 # devtools::install_github("rpolicastro/tsrexplorer", ref = "dev", force = TRUE)
 
-# Set base directory for analysis
-baseDir <- "/Users/gzentner/Desktop/tsrexplorer/STRIPE-seq"
-setwd(baseDir)
-
-if (!dir.exists(file.path(baseDir, "yeast_work/"))){
-  print("Creating directory 'yeast_work'...")
-  dir.create(file.path(baseDir, "yeast_work/"))
+if (!dir.exists("yeast_work/")){
+  message("Creating directory 'yeast_work'...")
+  dir.create("yeast_work/")
 } else {
-  print("Directory 'yeast_work' already exists...")
+  message("Directory 'yeast_work' already exists...")
 }
 
 ####################
@@ -30,7 +26,6 @@ if (!dir.exists(file.path(baseDir, "yeast_work/"))){
 
 # STRIPE-seq YPD TSSs
 YPD_TSSs <- map(list.files("yeast_data/YPD_TSSs/", full.names = TRUE), ~ read.delim(.x) %>%
-                      as.data.frame %>%
                       makeGRangesFromDataFrame(keep.extra.columns = TRUE, seqnames.field = "seq", 
                              start.field = "TSS", end.field = "TSS")) %>%
     set_names(c("S288C_50ng_1","S288C_50ng_2","S288C_50ng_3",
@@ -39,7 +34,6 @@ YPD_TSSs <- map(list.files("yeast_data/YPD_TSSs/", full.names = TRUE), ~ read.de
 
 # SLIC-CAGE and nanoCAGE TSSs
 CAGE_TSSs <- map(list.files("yeast_data/CAGE_TSSs/", full.names = TRUE), ~ read.delim(.x) %>%
-                     as.data.frame %>%
                      makeGRangesFromDataFrame(keep.extra.columns = TRUE, seqnames.field = "seq", 
                                               start.field = "TSS", end.field = "TSS")) %>%
     set_names(c("SLIC_CAGE_100ng_1","SLIC_CAGE_100ng_2",
@@ -48,7 +42,6 @@ CAGE_TSSs <- map(list.files("yeast_data/CAGE_TSSs/", full.names = TRUE), ~ read.
 
 # STRIPE-seq diamide TSSs
 diamide_TSSs <- map(list.files("yeast_data/diamide_TSSs/", full.names = TRUE), ~ read.delim(.x) %>%
-                        as.data.frame %>%
                         makeGRangesFromDataFrame(keep.extra.columns = TRUE, seqnames.field = "seq", 
                                                  start.field = "TSS", end.field = "TSS")) %>%
     set_names(c("S288C_diamide_100ng_1","S288C_diamide_100ng_2","S288C_diamide_100ng_3"))
@@ -62,7 +55,6 @@ full_TSSs_set <- c(YPD_TSSs,CAGE_TSSs,diamide_TSSs)
 
 # STRIPE-seq YPD TSRs
 YPD_TSRs <- map(list.files("yeast_data/YPD_TSRs/", full.names = TRUE), ~ read.delim(.x) %>%
-                      as.data.frame %>%
                       makeGRangesFromDataFrame(keep.extra.columns = TRUE, seqnames.field = "seq", 
                                                start.field = "start", end.field = "end")) %>%
     set_names(c("S288C_50ng_1","S288C_50ng_2","S288C_50ng_3",
@@ -71,7 +63,6 @@ YPD_TSRs <- map(list.files("yeast_data/YPD_TSRs/", full.names = TRUE), ~ read.de
 
 # SLIC-CAGE and nanoCAGE TSRs
 CAGE_TSRs <- map(list.files("yeast_data/CAGE_TSRs/", full.names = TRUE), ~ read.delim(.x) %>%
-                     as.data.frame %>%
                      makeGRangesFromDataFrame(keep.extra.columns = TRUE, seqnames.field = "seq", 
                                               start.field = "start", end.field = "end")) %>%
     set_names(c("SLIC_CAGE_100ng_1","SLIC_CAGE_100ng_2",
@@ -80,7 +71,6 @@ CAGE_TSRs <- map(list.files("yeast_data/CAGE_TSRs/", full.names = TRUE), ~ read.
 
 # STRIPE-seq diamide TSRs
 diamide_TSRs <- map(list.files("yeast_data/diamide_TSRs/", full.names = TRUE), ~ read.delim(.x) %>%
-                        as.data.frame %>%
                         makeGRangesFromDataFrame(keep.extra.columns = TRUE, seqnames.field = "seq", 
                                                  start.field = "start", end.field = "end")) %>%
     set_names(c("S288C_diamide_100ng_1","S288C_diamide_100ng_2","S288C_diamide_100ng_3"))
