@@ -186,9 +186,9 @@ ggsave("tss_feature_plot.pdf", plot = p, device = cairo_pdf, height = 4, width =
 
 # Generate TSS density plots
 p <- plot_average(exp, data_type = "tss", threshold = 3, samples = "S288C_100ng_1", upstream = 1000, downstream = 1000) +
-    ggplot2::theme(text = element_text(size = 6))
+    ggplot2::theme(text = element_text(size = 13))
 
-ggsave("tss_average_plot.pdf", plot = p, cairo_pdf, height = 4, width = 4)
+ggsave("tss_average_plot.pdf", plot = p, cairo_pdf, height = 2.5, width = 3.5)
 
 # Generate TSS sequence logos
 seqs <- tss_sequences(exp, genome_assembly = assembly, threshold = 3, samples = stripe)
