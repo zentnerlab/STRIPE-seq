@@ -193,16 +193,15 @@ ggsave("tss_average_plot.pdf", plot = p, cairo_pdf, height = 2.5, width = 3.5)
 # Generate TSS sequence logos
 seqs <- tss_sequences(exp, genome_assembly = assembly, threshold = 3, samples = stripe)
 
-p <- plot_sequence_logo(seqs, ncol = 3)
+p <- plot_sequence_logo(seqs, ncol = 3, font_size = 10)
 
-ggsave("tss_seq_logo.pdf", plot = p, device = cairo_pdf, height = 5, width = 15)
+ggsave("tss_seq_logo.pdf", plot = p, device = cairo_pdf, height = 5, width = 12)
 
 seqs <- tss_sequences(exp, genome_assembly = assembly, threshold = 3, quantiles = 5, samples = "S288C_100ng_1")
 
-p <- plot_sequence_logo(seqs, ncol = 1) +
-    ggplot2::theme(text = element_text(size = 5))
+p <- plot_sequence_logo(seqs, ncol = 1, font_size = 10)
 
-ggsave("tss_seq_logo_quantiles.pdf", plot = p, device = cairo_pdf, height = 5, width = 5)
+ggsave("tss_seq_logo_quantiles.pdf", plot = p, device = cairo_pdf, height = 7, width = 5)
 
 # Generate TSS color plot
 seqs <- tss_sequences(exp, genome_assembly = assembly, threshold = 3, samples = "S288C_100ng_1")
@@ -255,11 +254,11 @@ iwalk(exp@counts$TSSs$cpm, function(counts, sample) {
 exp <- count_normalization(exp, data_type = "tsr", threshold = 3, n_samples = 1, samples = stripe)
 
 # Generate a combinbed TSR correlation plot
-p <- plot_correlation(exp, data_type = "tsr") +
+p <- plot_correlation(exp, data_type = "tsr", font_size = 2, pt_size = 0.5) +
     ggplot2::theme_bw() +
-    ggplot2::theme(text = element_text(size = 6))
+    ggplot2::theme(text = element_text(size = 4))
 
-ggsave("tsr_correlation.png", plot = p, device = "png", type = "cairo", height = 12, width = 12)
+ggsave("tsr_correlation.png", plot = p, device = "png", type = "cairo", height = 5, width = 5)
 
 # Generate a hierarchically clustered TSR heatmap with correlation values displayed
 corr_matrix <- find_correlation(exp, data_type = "tsr", correlation_metric = "pearson")
