@@ -243,47 +243,13 @@ if (!dir.exists(file.path("yeast_work", "bedgraphs"))){
   message("Directory 'yeast_work/bedgraphs' already exists...")
 }
 
-# 50 ng
-export.bedGraph(exp@counts$TSSs$cpm$S288C_50ng_1[strand(exp@counts$TSSs$cpm$S288C_50ng_1) == "+"], 
-                file.path(baseDir, "yeast_work/bedgraphs/S288C_50ng_1_+.bedgraph"))
-export.bedGraph(exp@counts$TSSs$cpm$S288C_50ng_1[strand(exp@counts$TSSs$cpm$S288C_50ng_1) == "-"], 
-                file.path(baseDir, "yeast_work/bedgraphs/S288C_50ng_1_-.bedgraph"))
-export.bedGraph(exp@counts$TSSs$cpm$S288C_50ng_2[strand(exp@counts$TSSs$cpm$S288C_50ng_2) == "+"], 
-                file.path(baseDir, "yeast_work/bedgraphs/S288C_50ng_2_+.bedgraph"))
-export.bedGraph(exp@counts$TSSs$cpm$S288C_50ng_2[strand(exp@counts$TSSs$cpm$S288C_50ng_2) == "-"], 
-                file.path(baseDir, "yeast_work/bedgraphs/S288C_50ng_2_-.bedgraph"))
-export.bedGraph(exp@counts$TSSs$cpm$S288C_50ng_3[strand(exp@counts$TSSs$cpm$S288C_50ng_3) == "+"], 
-                file.path(baseDir, "yeast_work/bedgraphs/S288C_50ng_3_+.bedgraph"))
-export.bedGraph(exp@counts$TSSs$cpm$S288C_50ng_3[strand(exp@counts$TSSs$cpm$S288C_50ng_3) == "-"], 
-                file.path(baseDir, "yeast_work/bedgraphs/S288C_50ng_3_-.bedgraph"))
+iwalk(exp@counts$TSSs$cpm, function(counts, sample) {
+	pos <- counts[strand(counts) == "+"]
+	min <- counts[strand(counts) == "-"]
 
-# 100 ng
-export.bedGraph(exp@counts$TSSs$cpm$S288C_100ng_1[strand(exp@counts$TSSs$cpm$S288C_100ng_1) == "+"], 
-                file.path(baseDir, "yeast_work/bedgraphs/S288C_100ng_1_+.bedgraph"))
-export.bedGraph(exp@counts$TSSs$cpm$S288C_100ng_1[strand(exp@counts$TSSs$cpm$S288C_100ng_1) == "-"], 
-                file.path(baseDir, "yeast_work/bedgraphs/S288C_100ng_1_-.bedgraph"))
-export.bedGraph(exp@counts$TSSs$cpm$S288C_100ng_2[strand(exp@counts$TSSs$cpm$S288C_100ng_2) == "+"], 
-                file.path(baseDir, "yeast_work/bedgraphs/S288C_100ng_2_+.bedgraph"))
-export.bedGraph(exp@counts$TSSs$cpm$S288C_100ng_2[strand(exp@counts$TSSs$cpm$S288C_100ng_2) == "-"], 
-                file.path(baseDir, "yeast_work/bedgraphs/S288C_100ng_2_-.bedgraph"))
-export.bedGraph(exp@counts$TSSs$cpm$S288C_100ng_3[strand(exp@counts$TSSs$cpm$S288C_100ng_3) == "+"], 
-                file.path(baseDir, "yeast_work/bedgraphs/S288C_100ng_3_+.bedgraph"))
-export.bedGraph(exp@counts$TSSs$cpm$S288C_100ng_3[strand(exp@counts$TSSs$cpm$S288C_100ng_3) == "-"], 
-                file.path(baseDir, "yeast_work/bedgraphs/S288C_100ng_3_-.bedgraph"))
-
-# 250 ng
-export.bedGraph(exp@counts$TSSs$cpm$S288C_250ng_1[strand(exp@counts$TSSs$cpm$S288C_250ng_1) == "+"], 
-                file.path(baseDir, "yeast_work/bedgraphs/S288C_250ng_1_+.bedgraph"))
-export.bedGraph(exp@counts$TSSs$cpm$S288C_250ng_1[strand(exp@counts$TSSs$cpm$S288C_250ng_1) == "-"], 
-                file.path(baseDir, "yeast_work/bedgraphs/S288C_250ng_1_-.bedgraph"))
-export.bedGraph(exp@counts$TSSs$cpm$S288C_250ng_2[strand(exp@counts$TSSs$cpm$S288C_250ng_2) == "+"], 
-                file.path(baseDir, "yeast_work/bedgraphs/S288C_250ng_2_+.bedgraph"))
-export.bedGraph(exp@counts$TSSs$cpm$S288C_250ng_2[strand(exp@counts$TSSs$cpm$S288C_250ng_2) == "-"], 
-                file.path(baseDir, "yeast_work/bedgraphs/S288C_250ng_2_-.bedgraph"))
-export.bedGraph(exp@counts$TSSs$cpm$S288C_250ng_3[strand(exp@counts$TSSs$cpm$S288C_250ng_3) == "+"], 
-                file.path(baseDir, "yeast_work/bedgraphs/S288C_250ng_3_+.bedgraph"))
-export.bedGraph(exp@counts$TSSs$cpm$S288C_250ng_3[strand(exp@counts$TSSs$cpm$S288C_250ng_3) == "-"], 
-                file.path(baseDir, "yeast_work/bedgraphs/S288C_250ng_3_-.bedgraph"))
+	export(pos, file.path("yeast_work", "bedgraphs", paste(sample, "pos.bedgraph", sep = "_")), format = "bedgraph")
+	export(min, file.path("yeast_work", "bedgraphs", paste(sample, "min.bedgraph", sep = "_")), format = "bedgraph")
+})
 
 # Normalize TSR counts
 exp <- count_normalization(exp, data_type = "tsr", threshold = 3, n_samples = 1, samples = stripe)
