@@ -193,8 +193,7 @@ ggsave("tss_average_plot.pdf", plot = p, cairo_pdf, height = 2.5, width = 3.5)
 # Generate TSS sequence logos
 seqs <- tss_sequences(exp, genome_assembly = assembly, threshold = 3, samples = stripe)
 
-p <- plot_sequence_logo(seqs, ncol = 3) +
-    ggplot2::theme(text = element_text(size = 5))
+p <- plot_sequence_logo(seqs, ncol = 3)
 
 ggsave("tss_seq_logo.pdf", plot = p, device = cairo_pdf, height = 5, width = 15)
 
@@ -237,11 +236,11 @@ ggsave("max_utr.pdf", plot = p, device = cairo_pdf, height = 4, width = 4)
 
 # Export normalized TSS bedGraphs
 
-if (!dir.exists(file.path(baseDir, "yeast_work/bedgraphs/"))){
-  print("Creating directory 'yeast_work/bedgraphs'...")
-  dir.create(file.path(baseDir, "yeast_work/bedgraphs/"))
+if (!dir.exists(file.path("yeast_work", "bedgraphs"))){
+  message("Creating directory 'yeast_work/bedgraphs'...")
+  dir.create(file.path("yeast_work", "bedgraphs"))
 } else {
-  print("Directory 'yeast_work/bedgraphs' already exists...")
+  message("Directory 'yeast_work/bedgraphs' already exists...")
 }
 
 # 50 ng
