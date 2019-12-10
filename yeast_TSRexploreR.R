@@ -595,8 +595,10 @@ if (!dir.exists(rnaseq_dir)){
 }
 
 # Get feature counts for STRIPE-seq and RNA-seq
-stripe_counts <- read_tsv(file.path(baseDir, "yeast_data/RNA_seq/cleaned_S288C_feature_counts_STRIPEseq.tsv"))
-rnaseq_counts <- read_tsv(file.path(baseDir, "yeast_data/RNA_seq/cleaned_yeast_feature_counts.tsv"))
+stripe_counts <- read.delim(file.path("yeast_data", "RNA_seq", "cleaned_S288C_feature_counts_STRIPEseq.tsv"),
+                            sep = "\t", header = TRUE, stringsAsFactors = FALSE)
+rnaseq_counts <- read.delim(file.path("yeast_data", "RNA_seq", "cleaned_yeast_feature_counts.tsv"),
+                             sep = "\t", header = TRUE, stringsAsFactors = FALSE)
 
 stripe_counts <- column_to_rownames(stripe_counts, "Geneid") %>% as.matrix
 rnaseq_counts <- column_to_rownames(rnaseq_counts, "Geneid") %>% as.matrix
@@ -621,7 +623,7 @@ stripe_rnaseq_diamide <- c("RNASEQ001_S288C_untreated_r1", "RNASEQ002_S288C_untr
 # Find correlation of YPD STRIPE-seq and RNA-seq feature counts
 corr_matrix <- find_correlation(exp, data_type = "features", correlation_metric = "spearman", samples = stripe_rnaseq_ypd)
 
-cairo_pdf(file = "tss_rnaseq_correlation_ypd_hierarchical.pdf", width = 18, height = 18)
+cairo_pdf(file = file.path(rnaseq_dir, "tss_rnaseq_correlation_ypd_hierarchical.pdf"), width = 18, height = 18)
 Heatmap(corr_matrix, col = viridis(256), heatmap_legend_param = list(title = "spearman"), 
         layer_fun = function(j, i, x, y, width, height, fill)
         {
@@ -633,7 +635,7 @@ dev.off()
 # Find correlation of diamide STRIPE-seq and RNA-seq feature counts
 corr_matrix <- find_correlation(exp, data_type = "features", correlation_metric = "spearman", samples = stripe_rnaseq_diamide)
 
-cairo_pdf(file = "tss_rnaseq_correlation_diamide_hierarchical.pdf", width = 18, height = 18)
+cairo_pdf(file = file.path(rnaseq_dir, "tss_rnaseq_correlation_diamide_hierarchical.pdf"), width = 18, height = 18)
 Heatmap(corr_matrix, col = viridis(256), heatmap_legend_param = list(title = "spearman"), 
         layer_fun = function(j, i, x, y, width, height, fill)
         {
@@ -664,8 +666,9 @@ diff_features_stripe <- differential_expression(edger_model_stripe, data_type = 
 
 # Write differential STRIPE-seq features to a table
 diff_features_stripe %>% 
-    filter(log2FC <= -1 & FDR < 0.05 | log2FC >= 1 & FDR < 0.05) %>%
-    write.table(., "diff_features_stripe.tsv", sep="\t", col.names=T, row.names=F, quote=F)
+    filter(abs(log2FC) >= 1, FDR <= 0.05) %>%
+    write.table(file.path(rnaseq_dir, "diff_features_stripe.tsv"),
+                sep="\t", col.names = TRUE, row.names = FALSE, quote = FALSE)
 
 # Count differential STRIPE-seq features
 diff_features_stripe %>%
@@ -697,8 +700,9 @@ diff_features_rnaseq <- differential_expression(edger_model_rnaseq, data_type = 
 
 # Write differential RNA-seq features to a table
 diff_features_rnaseq %>% 
-    filter(log2FC <= -1 & FDR < 0.05 | log2FC >= 1 & FDR < 0.05) %>%
-    write.table(., "diff_features_rnaseq.tsv", sep="\t", col.names=T, row.names=F, quote=F)
+    filter(abs(log2FC) >= 1, FDR <= 0.05) %>%
+    write.table(file.path(rnaseq_dir, "diff_features_rnaseq.tsv"),
+                sep = "\t", col.names = TRUE, row.names = FALSE, quote = FALSE)
 
 # Count differential RNA-seq features
 diff_features_rnaseq %>%
