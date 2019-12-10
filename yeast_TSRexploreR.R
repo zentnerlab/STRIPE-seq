@@ -524,9 +524,9 @@ tsr_distribution <- genomic_distribution(exp, data_type = "tsr", threshold = 3,
                                          samples = diamide)
 
 p <- plot_genomic_distribution(tsr_distribution, sample_order = diamide) +
-    ggplot2::theme(text = element_text(size = 6), legend.key.size = unit(0.4, "cm"))
+    ggplot2::theme(text = element_text(size = 12), legend.key.size = unit(0.6, "cm"))
 
-ggsave("tsr_genomic_distribution.pdf", plot = p, device = cairo_pdf, height = 3, width = 4)
+ggsave(file.path(diamide_dir, "tsr_genomic_distribution.pdf"), plot = p, device = cairo_pdf, height = 4, width = 6)
 
 # Differential TSR (dTSR) analysis
 edger_model <- fit_edger_model(
