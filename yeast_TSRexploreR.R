@@ -486,18 +486,13 @@ p <- plot_max_utr(max) +
 ggsave(file.path(diamide_dir, "max_utr.pdf"), plot = p, device = cairo_pdf, height = 3, width = 3)
 
 # Export normalized TSS bedGraphs
-export.bedGraph(exp@counts$TSSs$cpm$S288C_diamide_100ng_1[strand(exp@counts$TSSs$cpm$S288C_diamide_100ng_1) == "+"], 
-                file.path(baseDir, "yeast_work/bedgraphs/S288C_diamide_100ng_1_+.bedgraph"))
-export.bedGraph(exp@counts$TSSs$cpm$S288C_diamide_100ng_1[strand(exp@counts$TSSs$cpm$S288C_diamide_100ng_1) == "-"], 
-                file.path(baseDir, "yeast_work/bedgraphs/S288C_diamide_100ng_1_-.bedgraph"))
-export.bedGraph(exp@counts$TSSs$cpm$S288C_diamide_100ng_2[strand(exp@counts$TSSs$cpm$S288C_diamide_100ng_2) == "+"], 
-                file.path(baseDir, "yeast_work/bedgraphs/S288C_diamide_100ng_2_+.bedgraph"))
-export.bedGraph(exp@counts$TSSs$cpm$S288C_diamide_100ng_2[strand(exp@counts$TSSs$cpm$S288C_diamide_100ng_2) == "-"], 
-                file.path(baseDir, "yeast_work/bedgraphs/S288C_diamide_100ng_2_-.bedgraph"))
-export.bedGraph(exp@counts$TSSs$cpm$S288C_diamide_100ng_3[strand(exp@counts$TSSs$cpm$S288C_diamide_100ng_3) == "+"], 
-                file.path(baseDir, "yeast_work/bedgraphs/S288C_diamide_100ng_3_+.bedgraph"))
-export.bedGraph(exp@counts$TSSs$cpm$S288C_diamide_100ng_3[strand(exp@counts$TSSs$cpm$S288C_diamide_100ng_3) == "-"], 
-                file.path(baseDir, "yeast_work/bedgraphs/S288C_diamide_100ng_3_-.bedgraph"))
+iwalk(exp@counts$TSSs$cpm, function(counts, sample) {
+	pos <- counts[strand(counts) == "+"]
+	min <- counts[strand(counts) == "-"]
+
+	export(pos, file.path("yeast_work", "bedgraphs", paste(sample, "pos.bedgraph", sep = "_")), format = "bedgraph")
+	export(min, file.path("yeast_work", "bedgraphs", paste(sample, "min.bedgraph", sep = "_")), format = "bedgraph")
+})
 
 # Normalize TSR counts
 exp <- count_normalization(exp, data_type = "tsr", threshold = 3, n_samples = 1, samples = diamide)
