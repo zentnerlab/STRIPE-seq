@@ -465,10 +465,9 @@ ggsave(file.path(diamide_dir, "tss_feature_plot.pdf"), plot = p, device = cairo_
 seqs <- tss_sequences(exp, genome_assembly = assembly, threshold = 3, 
                       samples = c("S288C_100ng_1","S288C_diamide_100ng_1"))
 
-p <- plot_sequence_logo(seqs, ncol = 1) +
-    ggplot2::theme(text = element_text(size = 5))
+p <- plot_sequence_logo(seqs, ncol = 1, font_size = 10)
 
-ggsave("tss_seq_logo.pdf", plot = p, device = cairo_pdf, height = 2, width = 3)
+ggsave(file.path(diamide_dir, "tss_seq_logo.pdf"), plot = p, device = cairo_pdf, height = 2.5, width = 4)
 
 # Plot distance of dominant TSS to annotated start codon
 dominant <- dominant_tss(exp, threshold = 3, feature_type = "geneId", samples = c("S288C_100ng_1","S288C_diamide_100ng_1"))
