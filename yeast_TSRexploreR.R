@@ -116,9 +116,9 @@ exp <- tsr_explorer(full_TSSs_set,full_TSR_set)
 
 ypd_stripe_dir <- file.path("yeast_work", "YPD_STRIPE")
 
-if (!dir.exists("yeast_work/YPD_STRIPE/")){
+if (!dir.exists(ypd_stripe_dir){
   message("Creating directory 'yeast_work/YPD_STRIPE' and changing working directory...")
-  dir.create("yeast_work/YPD_STRIPE/")
+  dir.create(ypd_stripe_dir)
 } else {
   message("Directory 'yeast_work/YPD_STRIPE' already exisits, changing working directory...")
 }
@@ -318,9 +318,9 @@ ggsave(file.path(ypd_stripe_dir, "tsr_density_plot.pdf"), plot = p, device = cai
 
 cage_dir <- file.path("yeast_work", "CAGE")
 
-if (!dir.exists(file.path("yeast_work", "CAGE"))){
+if (!dir.exists(cage_dir)){
   message("Creating directory 'yeast_work/CAGE' and changing working directory...")
-  dir.create(file.path("yeast_work", "CAGE"))
+  dir.create(cage_dir)
 } else {
   message("Directory 'yeast_work/CAGE' already exists, changing working directory...")
 }
@@ -417,11 +417,11 @@ ggsave(file.path(cage_dir, "tsr_feature_plot.pdf"), plot = p, device = cairo_pdf
 
 diamide_dir <- file.path("yeast_work", "diamide")
 
-if (!dir.exists(file.path(baseDir, "yeast_work/diamide/"))){
+if (!dir.exists(diamide_dir)){
   message("Creating directory 'yeast_work/diamide' and changing working directory...")
-  dir.create(file.path("yeast_work", "diamide"))
+  dir.create(diamide_dir)
 } else {
-  print("Directory 'yeast_work/diamide' already exists, changing working directory...")
+  message("Directory 'yeast_work/diamide' already exists, changing working directory...")
 }
 
 # Normalize TSS counts
@@ -585,13 +585,13 @@ go_enrichment <- clusterProfiler::compareCluster(
 ### RNA-seq analysis (YPD and diamide) ###
 ##########################################
 
-if (!dir.exists(file.path(baseDir, "yeast_work/RNA_seq/"))){
-    print("Creating directory 'yeast_work/RNA_seq' and changing working directory...")
-    dir.create(file.path(baseDir, "yeast_work/RNA_seq/"))
-    setwd(file.path(baseDir, "yeast_work/RNA_seq/"))
+rnaseq_dir <- file.path("yeast_work", "RNA_seq")
+
+if (!dir.exists(rnaseq_dir)){
+    message("Creating directory 'yeast_work/RNA_seq' and changing working directory...")
+    dir.create(rnaseq_dir)
 } else {
-    print("Directory 'yeast_work/RNA_seq' already exisits, changing working directory...")
-    setwd(file.path(baseDir, "yeast_work/RNA_seq/"))
+    message("Directory 'yeast_work/RNA_seq' already exisits, changing working directory...")
 }
 
 # Get feature counts for STRIPE-seq and RNA-seq
