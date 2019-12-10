@@ -340,9 +340,9 @@ thresh <- explore_thresholds(exp, annotation_file = annotation, feature_type = "
 
 p <- plot_threshold_exploration(thresh, ncol = 3, point_size = 2, sample_order = cage) +
     ggplot2::geom_vline(xintercept = 3, lty = 2) + 
-    ggplot2::theme(legend.key.size = unit(0.4, "cm"))
+    ggplot2::theme(legend.key.size = unit(0.8, "cm"), text = element_text(size = 12))
 
-ggsave("tss_thresholds.pdf", plot = p, device = cairo_pdf, height = 8, width = 12)
+ggsave("tss_thresholds.pdf", plot = p, device = cairo_pdf, height = 5, width = 10)
 
 # Determine TSS distribution relative to genomic features
 tss_distribution <- genomic_distribution(exp, data_type = "tss", threshold = 3, samples = cage)
