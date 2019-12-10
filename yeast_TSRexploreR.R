@@ -348,9 +348,9 @@ ggsave("tss_thresholds.pdf", plot = p, device = cairo_pdf, height = 5, width = 1
 tss_distribution <- genomic_distribution(exp, data_type = "tss", threshold = 3, samples = cage)
 
 p <- plot_genomic_distribution(tss_distribution, sample_order = cage) +
-    ggplot2::theme(text = element_text(size = 6), legend.key.size = unit(0.4, "cm"))
+    ggplot2::theme(text = element_text(size = 14), legend.key.size = unit(0.8, "cm"))
 
-ggsave("tss_genomic_distribution.pdf", plot = p, device = cairo_pdf, height = 3, width = 4)
+ggsave("tss_genomic_distribution.pdf", plot = p, device = cairo_pdf, height = 6, width = 6)
 
 # Assess TSS dinucleotide frequencies
 frequencies <- dinucleotide_frequencies(exp, genome_assembly = assembly, threshold = 3, 
