@@ -114,13 +114,13 @@ exp <- tsr_explorer(full_TSSs_set,full_TSR_set)
 ### YPD input variation replicate analysis ###
 ##############################################
 
+ypd_stripe_dir <- file.path("yeast_work", "YPD_STRIPE")
+
 if (!dir.exists("yeast_work/YPD_STRIPE/")){
   message("Creating directory 'yeast_work/YPD_STRIPE' and changing working directory...")
   dir.create("yeast_work/YPD_STRIPE/")
-  setwd("yeast_work/YPD_STRIPE/")
 } else {
   message("Directory 'yeast_work/YPD_STRIPE' already exisits, changing working directory...")
-  setwd("yeast_work/YPD_STRIPE/")
 }
 
 # Normalize TSS counts
@@ -131,12 +131,12 @@ p <- plot_correlation(exp, data_type = "tss", font_size = 2, pt_size = 0.5) +
     ggplot2::theme_bw() +
     ggplot2::theme(text = element_text(size = 4))
 
-ggsave("tss_correlation.png", plot = p, device = "png", type = "cairo", height = 5, width = 5)
+ggsave(file.path(ypd_stripe_dir, "tss_correlation.png"), plot = p, device = "png", type = "cairo", height = 5, width = 5)
 
 # Generate a hierarchically clustered TSS heatmap with correlation values displayed
 corr_matrix <- find_correlation(exp, data_type = "tss", correlation_metric = "pearson")
 
-cairo_pdf(file = "tss_correlation_hierarchical.pdf", width = 13.5, height = 13.5)
+cairo_pdf(file = file.path(ypd_stripe_dir, "tss_correlation_hierarchical.pdf"), width = 13.5, height = 13.5)
 Heatmap(corr_matrix, col = viridis(256), heatmap_legend_param = list(title = "PCC"), 
         layer_fun = function(j, i, x, y, width, height, fill)
         {
@@ -157,7 +157,7 @@ p <- plot_threshold_exploration(thresh, ncol = 3, point_size = 1.5, sample_order
     geom_vline(xintercept = 3, lty = 2) +
     theme(legend.key.size = unit(0.8, "cm"), text = element_text(size = 12))
 
-ggsave("tss_thresholds.pdf", plot = p, device = cairo_pdf, height = 5, width = 10)
+ggsave(file.path(ypd_stripe_dir, "tss_thresholds.pdf"), plot = p, device = cairo_pdf, height = 5, width = 10)
 
 # Determine TSS distribution relative to genomic features
 tss_distribution <- genomic_distribution(exp, data_type = "tss", threshold = 3, samples = stripe)
@@ -165,7 +165,7 @@ tss_distribution <- genomic_distribution(exp, data_type = "tss", threshold = 3, 
 p <- plot_genomic_distribution(tss_distribution, sample_order = stripe) +
     ggplot2::theme(text = element_text(size = 14), legend.key.size = unit(0.8, "cm"))
 
-ggsave("tss_genomic_distribution.pdf", plot = p, device = cairo_pdf, height = 6, width = 6)
+ggsave(file.path(ypd_stripe_dir, "tss_genomic_distribution.pdf"), plot = p, device = cairo_pdf, height = 6, width = 6)
 
 genomic_dist <- genomic_distribution(exp, data_type = "tss", threshold = 3, quantiles = 5, 
                                      samples = "S288C_100ng_1")
@@ -173,7 +173,7 @@ genomic_dist <- genomic_distribution(exp, data_type = "tss", threshold = 3, quan
 p <- plot_genomic_distribution(genomic_dist, sample_order = stripe) +
     ggplot2::theme(text = element_text(size = 14), legend.key.size = unit(0.8, "cm"))
 
-ggsave("tss_genomic_distribution_quantiles.pdf", plot = p, device = cairo_pdf, height = 4.5, width = 6)
+ggsave(file.path(ypd_stripe_dir, "tss_genomic_distribution_quantiles.pdf"), plot = p, device = cairo_pdf, height = 4.5, width = 6)
 
 # Plot number of promoter-proximal features with a TSS
 features <- detect_features(exp, data_type = "tss", feature_type = "transcript", threshold = 3, 
@@ -182,26 +182,26 @@ features <- detect_features(exp, data_type = "tss", feature_type = "transcript",
 p <- plot_detected_features(features, ncol = 3, width = 0.75) +
     ggplot2::theme(text = element_text(size = 14), legend.key.size = unit(0.8, "cm"))
 
-ggsave("tss_feature_plot.pdf", plot = p, device = cairo_pdf, height = 4, width = 8)
+ggsave(file.path(ypd_stripe_dir, "tss_feature_plot.pdf"), plot = p, device = cairo_pdf, height = 4, width = 8)
 
 # Generate TSS density plots
 p <- plot_average(exp, data_type = "tss", threshold = 3, samples = "S288C_100ng_1", upstream = 1000, downstream = 1000) +
     ggplot2::theme(text = element_text(size = 13))
 
-ggsave("tss_average_plot.pdf", plot = p, cairo_pdf, height = 2.5, width = 3.5)
+ggsave(file.path(ypd_stripe_dir, "tss_average_plot.pdf"), plot = p, cairo_pdf, height = 2.5, width = 3.5)
 
 # Generate TSS sequence logos
 seqs <- tss_sequences(exp, genome_assembly = assembly, threshold = 3, samples = stripe)
 
 p <- plot_sequence_logo(seqs, ncol = 3, font_size = 10)
 
-ggsave("tss_seq_logo.pdf", plot = p, device = cairo_pdf, height = 5, width = 12)
+ggsave(file.path(ypd_stripe_dir, "tss_seq_logo.pdf"), plot = p, device = cairo_pdf, height = 5, width = 12)
 
 seqs <- tss_sequences(exp, genome_assembly = assembly, threshold = 3, quantiles = 5, samples = "S288C_100ng_1")
 
 p <- plot_sequence_logo(seqs, ncol = 1, font_size = 10)
 
-ggsave("tss_seq_logo_quantiles.pdf", plot = p, device = cairo_pdf, height = 7, width = 5)
+ggsave(file.path(ypd_stripe_dir, "tss_seq_logo_quantiles.pdf"), plot = p, device = cairo_pdf, height = 7, width = 5)
 
 # Generate TSS color plot
 seqs <- tss_sequences(exp, genome_assembly = assembly, threshold = 3, samples = "S288C_100ng_1")
@@ -209,7 +209,7 @@ seqs <- tss_sequences(exp, genome_assembly = assembly, threshold = 3, samples = 
 p <- plot_sequence_colormap(seqs, ncol = 3) +
     ggplot2::theme(text = element_text(size = 6), legend.key.size = unit(0.4, "cm"))
 
-ggsave("tss_seq_colormap.png", plot = p, device = "png", type = "cairo", height = 2.5, width = 2)
+ggsave(file.path(ypd_stripe_dir, "tss_seq_colormap.png"), plot = p, device = "png", type = "cairo", height = 2.5, width = 2)
 
 # Assess TSS dinucleotide frequencies
 frequencies <- dinucleotide_frequencies(exp, genome_assembly = assembly, threshold = 3, samples = stripe)
@@ -217,21 +217,21 @@ frequencies <- dinucleotide_frequencies(exp, genome_assembly = assembly, thresho
 p <- plot_dinucleotide_frequencies(frequencies, ncol = 3, sample_order = stripe) +
     ggplot2::theme(text = element_text(size = 6), legend.key.size = unit(0.4, "cm"))
 
-ggsave("tss_dinucleotide_frequencies.pdf", plot = p, device = cairo_pdf, height = 7, width = 8)
+ggsave(file.path(ypd_stripe_dir, "tss_dinucleotide_frequencies.pdf"), plot = p, device = cairo_pdf, height = 7, width = 8)
 
 # Plot distance of dominant TSS to annotated start codon
 dominant <- dominant_tss(exp, threshold = 3, feature_type = "geneId", samples = "S288C_100ng_1")
 
 p <- plot_dominant_tss(dominant)
 
-ggsave("dominant_tss.pdf", plot = p, device = cairo_pdf, height = 4, width = 4)
+ggsave(file.path(ypd_stripe_dir, "dominant_tss.pdf"), plot = p, device = cairo_pdf, height = 4, width = 4)
 
 # Plot hypothetical maximum 5'UTR length
 max <- max_utr(exp, threshold = 3, feature_type = "geneId", samples = "S288C_100ng_1")
 
 p <- plot_max_utr(max)
 
-ggsave("max_utr.pdf", plot = p, device = cairo_pdf, height = 4, width = 4)
+ggsave(file.path(ypd_stripe_dir, "max_utr.pdf"), plot = p, device = cairo_pdf, height = 4, width = 4)
 
 # Export normalized TSS bedGraphs
 
@@ -258,12 +258,12 @@ p <- plot_correlation(exp, data_type = "tsr", font_size = 2, pt_size = 0.5) +
     ggplot2::theme_bw() +
     ggplot2::theme(text = element_text(size = 4))
 
-ggsave("tsr_correlation.png", plot = p, device = "png", type = "cairo", height = 5, width = 5)
+ggsave(file.path(ypd_stripe_dir, "tsr_correlation.png"), plot = p, device = "png", type = "cairo", height = 5, width = 5)
 
 # Generate a hierarchically clustered TSR heatmap with correlation values displayed
 corr_matrix <- find_correlation(exp, data_type = "tsr", correlation_metric = "pearson")
 
-cairo_pdf(file = "tsr_correlation_hierarchical.pdf", width = 13.5, height = 13.5)
+cairo_pdf(file = file.path(ypd_stripe_dir, "tsr_correlation_hierarchical.pdf"), width = 13.5, height = 13.5)
 Heatmap(corr_matrix, col = viridis(256), heatmap_legend_param = list(title = "PCC"), 
         layer_fun = function(j, i, x, y, width, height, fill)
         {
@@ -281,7 +281,7 @@ tsr_distribution <- genomic_distribution(exp, data_type = "tsr", threshold = 3, 
 p <- plot_genomic_distribution(tsr_distribution) +
     ggplot2::theme(text = element_text(size = 12), legend.key.size = unit(0.6, "cm"))
 
-ggsave("tsr_genomic_distribution.pdf", plot = p, device = cairo_pdf, height = 2, width = 6)
+ggsave(file.path(ypd_stripe_dir, "tsr_genomic_distribution.pdf"), plot = p, device = cairo_pdf, height = 2, width = 6)
 
 tsr_distribution <- genomic_distribution(exp, data_type = "tsr", threshold = 3, quantiles = 5, 
                                          samples = stripe)
@@ -289,7 +289,7 @@ tsr_distribution <- genomic_distribution(exp, data_type = "tsr", threshold = 3, 
 p <- plot_genomic_distribution(tsr_distribution, sample_order = stripe) +
     ggplot2::theme(text = element_text(size = 14), legend.key.size = unit(0.8, "cm"))
 
-ggsave("tsr_genomic_distribution_quantiles.pdf", plot = p, device = cairo_pdf, height = 12, width = 6)
+ggsave(file.path(ypd_stripe_dir, "tsr_genomic_distribution_quantiles.pdf"), plot = p, device = cairo_pdf, height = 12, width = 6)
 
 # Plot number of promoter-proximal features with a TSR
 features <- detect_features(exp, data_type = "tsr", feature_type = "transcript", samples = stripe)
@@ -297,7 +297,7 @@ features <- detect_features(exp, data_type = "tsr", feature_type = "transcript",
 p <- plot_detected_features(features, ncol = 3, width = 0.75) +
     ggplot2::theme(text = element_text(size = 14), legend.key.size = unit(0.8, "cm"))
 
-ggsave("tsr_feature_plot.pdf", plot = p, device = cairo_pdf, height = 4.5, width = 8)
+ggsave(file.path(ypd_stripe_dir, "tsr_feature_plot.pdf"), plot = p, device = cairo_pdf, height = 4.5, width = 8)
 
 # # Plot selected TSR metrics
 # p <- plot_tsr_metric(exp, tsr_metrics = "nTSSs", log2_transform = TRUE, ncol = 1, plot_type = "boxjitter", 
@@ -310,21 +310,19 @@ ggsave("tsr_feature_plot.pdf", plot = p, device = cairo_pdf, height = 4.5, width
 p <- plot_average(exp, data_type = "tsr", samples = "S288C_100ng_1", upstream = 1000, downstream = 1000) +
     ggplot2::theme(text = element_text(size = 13))
 
-ggsave("tsr_density_plot.pdf", plot = p, device = cairo_pdf, height = 2.5, width = 3.5)
+ggsave(file.path(ypd_stripe_dir, "tsr_density_plot.pdf"), plot = p, device = cairo_pdf, height = 2.5, width = 3.5)
 
 ####################################
 ### STRIPE-seq vs. CAGE analysis ###
 ####################################
 
-setwd("..")
+cage_dir <- file.path("yeast_work", "CAGE")
 
 if (!dir.exists(file.path("yeast_work", "CAGE"))){
   message("Creating directory 'yeast_work/CAGE' and changing working directory...")
   dir.create(file.path("yeast_work", "CAGE"))
-  setwd(file.path("yeast_work", "CAGE"))
 } else {
   message("Directory 'yeast_work/CAGE' already exists, changing working directory...")
-  setwd(file.path("yeast_work", "CAGE"))
 }
 
 # Normalize TSS counts
@@ -342,7 +340,7 @@ p <- plot_threshold_exploration(thresh, ncol = 3, point_size = 2, sample_order =
     ggplot2::geom_vline(xintercept = 3, lty = 2) + 
     ggplot2::theme(legend.key.size = unit(0.8, "cm"), text = element_text(size = 12))
 
-ggsave("tss_thresholds.pdf", plot = p, device = cairo_pdf, height = 5, width = 10)
+ggsave(file.path(cage_dir, "tss_thresholds.pdf"), plot = p, device = cairo_pdf, height = 5, width = 10)
 
 # Determine TSS distribution relative to genomic features
 tss_distribution <- genomic_distribution(exp, data_type = "tss", threshold = 3, samples = cage)
@@ -350,7 +348,7 @@ tss_distribution <- genomic_distribution(exp, data_type = "tss", threshold = 3, 
 p <- plot_genomic_distribution(tss_distribution, sample_order = cage) +
     ggplot2::theme(text = element_text(size = 14), legend.key.size = unit(0.8, "cm"))
 
-ggsave("tss_genomic_distribution.pdf", plot = p, device = cairo_pdf, height = 6, width = 6)
+ggsave(file.path(cage_dir, "tss_genomic_distribution.pdf"), plot = p, device = cairo_pdf, height = 6, width = 6)
 
 # Assess TSS dinucleotide frequencies
 frequencies <- dinucleotide_frequencies(exp, genome_assembly = assembly, threshold = 3, 
@@ -359,39 +357,17 @@ frequencies <- dinucleotide_frequencies(exp, genome_assembly = assembly, thresho
 p <- plot_dinucleotide_frequencies(frequencies, ncol = 3, sample_order = cage) +
   ggplot2::theme(text = element_text(size = 12), legend.key.size = unit(0.8, "cm"))
 
-ggsave("tss_dinucleotide_frequencies.pdf", plot = p, device = cairo_pdf, height = 7.5, width = 7)
+ggsave(file.path(cage_dir, "tss_dinucleotide_frequencies.pdf"), plot = p, device = cairo_pdf, height = 7, width = 7)
 
 # Export normalized TSS bedGraphs
 
-# SLIC-CAGE
-export.bedGraph(exp@counts$TSSs$cpm$SLIC_CAGE_100ng_1[strand(exp@counts$TSSs$cpm$SLIC_CAGE_100ng_1) == "+"], 
-                file.path(baseDir, "yeast_work/bedgraphs/SLIC_CAGE_100ng_1_+.bedgraph"))
-export.bedGraph(exp@counts$TSSs$cpm$SLIC_CAGE_100ng_1[strand(exp@counts$TSSs$cpm$SLIC_CAGE_100ng_1) == "-"], 
-                file.path(baseDir, "yeast_work/bedgraphs/SLIC_CAGE_100ng_1_-.bedgraph"))
-export.bedGraph(exp@counts$TSSs$cpm$SLIC_CAGE_100ng_2[strand(exp@counts$TSSs$cpm$SLIC_CAGE_100ng_2) == "+"], 
-                file.path(baseDir, "yeast_work/bedgraphs/SLIC_CAGE_100ng_2_+.bedgraph"))
-export.bedGraph(exp@counts$TSSs$cpm$SLIC_CAGE_100ng_2[strand(exp@counts$TSSs$cpm$SLIC_CAGE_100ng_2) == "-"], 
-                file.path(baseDir, "yeast_work/bedgraphs/SLIC_CAGE_100ng_2_-.bedgraph"))
+iwalk(exp@counts$TSSs$cpm, function(counts, sample) {
+	pos <- counts[strand(counts) == "+"]
+	min <- counts[strand(counts) == "-"]
 
-# nanoCAGE 500 ng
-export.bedGraph(exp@counts$TSSs$cpm$nanoCAGE_500ng_1[strand(exp@counts$TSSs$cpm$nanoCAGE_500ng_1) == "+"], 
-                file.path(baseDir, "yeast_work/bedgraphs/nanoCAGE_500ng_1_+.bedgraph"))
-export.bedGraph(exp@counts$TSSs$cpm$nanoCAGE_500ng_1[strand(exp@counts$TSSs$cpm$nanoCAGE_500ng_1) == "-"], 
-                file.path(baseDir, "yeast_work/bedgraphs/nanoCAGE_500ng_1_-.bedgraph"))
-export.bedGraph(exp@counts$TSSs$cpm$nanoCAGE_500ng_2[strand(exp@counts$TSSs$cpm$nanoCAGE_500ng_2) == "+"], 
-                file.path(baseDir, "yeast_work/bedgraphs/nanoCAGE_500ng_2_+.bedgraph"))
-export.bedGraph(exp@counts$TSSs$cpm$nanoCAGE_500ng_2[strand(exp@counts$TSSs$cpm$nanoCAGE_500ng_2) == "-"], 
-                file.path(baseDir, "yeast_work/bedgraphs/nanoCAGE_500ng_2_-.bedgraph"))
-
-# nanoCAGE 25 ng
-export.bedGraph(exp@counts$TSSs$cpm$nanoCAGE_25ng_1[strand(exp@counts$TSSs$cpm$nanoCAGE_25ng_1) == "+"], 
-                file.path(baseDir, "yeast_work/bedgraphs/nanoCAGE_25ng_1_+.bedgraph"))
-export.bedGraph(exp@counts$TSSs$cpm$nanoCAGE_25ng_1[strand(exp@counts$TSSs$cpm$nanoCAGE_25ng_1) == "-"], 
-                file.path(baseDir, "yeast_work/bedgraphs/nanoCAGE_25ng_1_-.bedgraph"))
-export.bedGraph(exp@counts$TSSs$cpm$nanoCAGE_25ng_2[strand(exp@counts$TSSs$cpm$nanoCAGE_25ng_2) == "+"], 
-                file.path(baseDir, "yeast_work/bedgraphs/nanoCAGE_25ng_2_+.bedgraph"))
-export.bedGraph(exp@counts$TSSs$cpm$nanoCAGE_25ng_2[strand(exp@counts$TSSs$cpm$nanoCAGE_25ng_2) == "-"], 
-                file.path(baseDir, "yeast_work/bedgraphs/nanoCAGE_25ng_2_-.bedgraph"))
+	export(pos, file.path("yeast_work", "bedgraphs", paste(sample, "pos.bedgraph", sep = "_")), format = "bedgraph")
+	export(min, file.path("yeast_work", "bedgraphs", paste(sample, "min.bedgraph", sep = "_")), format = "bedgraph")
+})
 
 # Normalize TSR counts
 exp <- count_normalization(exp, data_type = "tsr", threshold = 3, n_samples = 1, samples = all)
