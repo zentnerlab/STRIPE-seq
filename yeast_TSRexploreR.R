@@ -215,23 +215,25 @@ ggsave(file.path(ypd_stripe_dir, "tss_seq_colormap.png"), plot = p, device = "pn
 frequencies <- dinucleotide_frequencies(exp, genome_assembly = assembly, threshold = 3, samples = stripe)
 
 p <- plot_dinucleotide_frequencies(frequencies, ncol = 3, sample_order = stripe) +
-    ggplot2::theme(text = element_text(size = 6), legend.key.size = unit(0.4, "cm"))
+    ggplot2::theme(text = element_text(size = 12), legend.key.size = unit(0.8, "cm"))
 
-ggsave(file.path(ypd_stripe_dir, "tss_dinucleotide_frequencies.pdf"), plot = p, device = cairo_pdf, height = 7, width = 8)
+ggsave(file.path(ypd_stripe_dir, "tss_dinucleotide_frequencies.pdf"), plot = p, device = cairo_pdf, height = 7, width = 7)
 
 # Plot distance of dominant TSS to annotated start codon
 dominant <- dominant_tss(exp, threshold = 3, feature_type = "geneId", samples = "S288C_100ng_1")
 
-p <- plot_dominant_tss(dominant)
+p <- plot_dominant_tss(dominant) +
+	theme(text = element_text(size = 12))
 
-ggsave(file.path(ypd_stripe_dir, "dominant_tss.pdf"), plot = p, device = cairo_pdf, height = 4, width = 4)
+ggsave(file.path(ypd_stripe_dir, "dominant_tss.pdf"), plot = p, device = cairo_pdf, height = 3, width = 3)
 
 # Plot hypothetical maximum 5'UTR length
 max <- max_utr(exp, threshold = 3, feature_type = "geneId", samples = "S288C_100ng_1")
 
-p <- plot_max_utr(max)
+p <- plot_max_utr(max) +
+	theme(text = element_text(size = 12))
 
-ggsave(file.path(ypd_stripe_dir, "max_utr.pdf"), plot = p, device = cairo_pdf, height = 4, width = 4)
+ggsave(file.path(ypd_stripe_dir, "max_utr.pdf"), plot = p, device = cairo_pdf, height = 3, width = 3)
 
 # Export normalized TSS bedGraphs
 
