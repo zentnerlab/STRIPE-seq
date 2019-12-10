@@ -498,16 +498,16 @@ iwalk(exp@counts$TSSs$cpm, function(counts, sample) {
 exp <- count_normalization(exp, data_type = "tsr", threshold = 3, n_samples = 1, samples = diamide)
 
 # Generate a combinbed TSR correlation plot
-p <- plot_correlation(exp, data_type = "tsr") +
+p <- plot_correlation(exp, data_type = "tsr", font_size = 2, pt_size = 0.5) +
     ggplot2::theme_bw() +
-    ggplot2::theme(text = element_text(size = 6))
+    ggplot2::theme(text = element_text(size = 5))
 
-ggsave("tsr_correlation.png", plot = p, device = "png", type = "cairo", height = 8, width = 8)
+ggsave(file.path(diamide_dir, "tsr_correlation.png"), plot = p, device = "png", type = "cairo", height = 4, width = 4)
 
 # Generate a hierarchically clustered TSS heatmap with correlation values displayed
 corr_matrix <- find_correlation(exp, data_type = "tsr", correlation_metric = "pearson")
 
-cairo_pdf(file = "tsr_correlation_hierarchical.pdf", width = 9, height = 9)
+cairo_pdf(file = file.path(diamide_dir, "tsr_correlation_hierarchical.pdf"), width = 9, height = 9)
 Heatmap(corr_matrix, col = viridis(256), heatmap_legend_param = list(title = "PCC"), 
         layer_fun = function(j, i, x, y, width, height, fill)
         {
