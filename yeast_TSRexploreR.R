@@ -308,9 +308,9 @@ ggsave("tsr_feature_plot.pdf", plot = p, device = cairo_pdf, height = 4.5, width
 
 # Generate TSR density plot
 p <- plot_average(exp, data_type = "tsr", samples = "S288C_100ng_1", upstream = 1000, downstream = 1000) +
-    ggplot2::theme(text = element_text(size = 6))
+    ggplot2::theme(text = element_text(size = 13))
 
-ggsave("tsr_density_plot.pdf", plot = p, device = cairo_pdf, height = 3, width = 3)
+ggsave("tsr_density_plot.pdf", plot = p, device = cairo_pdf, height = 2.5, width = 3.5)
 
 ####################################
 ### STRIPE-seq vs. CAGE analysis ###
