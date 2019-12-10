@@ -357,9 +357,9 @@ frequencies <- dinucleotide_frequencies(exp, genome_assembly = assembly, thresho
                                         samples = cage)
 
 p <- plot_dinucleotide_frequencies(frequencies, ncol = 3, sample_order = cage) +
-  ggplot2::theme(text = element_text(size = 6), legend.key.size = unit(0.4, "cm"))
+  ggplot2::theme(text = element_text(size = 12), legend.key.size = unit(0.8, "cm"))
 
-ggsave("tss_dinucleotide_frequencies.pdf", plot = p, device = cairo_pdf, height = 7, width = 8)
+ggsave("tss_dinucleotide_frequencies.pdf", plot = p, device = cairo_pdf, height = 7.5, width = 7)
 
 # Export normalized TSS bedGraphs
 
