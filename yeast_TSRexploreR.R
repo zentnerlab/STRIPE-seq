@@ -547,8 +547,9 @@ diff_tsrs <- differential_expression(edger_model, data_type = "tsr", compare_gro
 
 # Write dTSRs to a table
 diff_tsrs %>% 
-    filter(log2FC <= -1 & FDR < 0.05 | log2FC >= 1 & FDR < 0.05) %>%
-    write.table(., "diff_tsrs.tsv", sep="\t", col.names=T, row.names=F, quote=F)
+    filter(abs(log2FC) >= 1, FDR <= 0.05) %>%
+    write.table(file.path(diamide_dir, "diff_tsrs.tsv"),
+                sep = "\t", col.names = TRUE, row.names = FALSE, quote = FALSE)
 
 # Annotate dTSRs
 annotated_diff_tsrs <- annotate_differential_tsrs(diff_tsrs, annotation_file = annotation, 
@@ -557,15 +558,15 @@ annotated_diff_tsrs <- annotate_differential_tsrs(diff_tsrs, annotation_file = a
 
 # Write annotated significant dTSRs to a table
 annotated_diff_tsrs %>% 
-    filter(annotation == "Promoter" & log2FC <= -1 & FDR < 0.05 | 
-           annotation == "Promoter" & log2FC >= 1 & FDR < 0.05) %>%
-    write.table(., "promoter_annotated_diff_tsrs.tsv", sep="\t", col.names=T, row.names=F, quote=F)
+    filter(annotation == "Promoter", abs(log2FC) >= 1, FDR <= 0.05) %>%
+    write.table(file.path(diamide_dir, "promoter_annotated_diff_tsrs.tsv"),
+                sep = "\t", col.names = TRUE, row.names = FALSE, quote = FALSE)
 
 # Make a volcano plot of dTSRs
-p <- plot_volcano(diff_tsrs, size = 0.1) + 
-    ggplot2::theme(legend.key.size = unit(0.4, "cm"))
+p <- plot_volcano(diff_tsrs, size = 0.25) + 
+    ggplot2::theme(text = element_text(size = 12))
 
-ggsave("diff_tsrs_volcano_plot.pdf", plot = p, device = cairo_pdf, height = 2.5, width = 4)
+ggsave(file.path(diamide_dir, "diff_tsrs_volcano_plot.pdf"), plot = p, device = cairo_pdf, height = 2.5, width = 5)
 
 # Perform GO analysis (work in progress)
 enrichment_data <- export_for_enrichment(annotated_diff_tsrs)
