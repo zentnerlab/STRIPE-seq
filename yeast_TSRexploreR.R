@@ -316,13 +316,15 @@ ggsave("tsr_density_plot.pdf", plot = p, device = cairo_pdf, height = 2.5, width
 ### STRIPE-seq vs. CAGE analysis ###
 ####################################
 
-if (!dir.exists(file.path(baseDir, "yeast_work/CAGE/"))){
-  print("Creating directory 'yeast_work/CAGE' and changing working directory...")
-  dir.create(file.path(baseDir, "yeast_work/CAGE/"))
-  setwd(file.path(baseDir, "yeast_work/CAGE/"))
+setwd("..")
+
+if (!dir.exists(file.path("yeast_work", "CAGE"))){
+  message("Creating directory 'yeast_work/CAGE' and changing working directory...")
+  dir.create(file.path("yeast_work", "CAGE"))
+  setwd(file.path("yeast_work", "CAGE"))
 } else {
-  print("Directory 'yeast_work/CAGE' already exists, changing working directory...")
-  setwd(file.path(baseDir, "yeast_work/CAGE/"))
+  message("Directory 'yeast_work/CAGE' already exists, changing working directory...")
+  setwd(file.path("yeast_work", "CAGE"))
 }
 
 # Normalize TSS counts
