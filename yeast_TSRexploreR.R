@@ -472,9 +472,10 @@ ggsave(file.path(diamide_dir, "tss_seq_logo.pdf"), plot = p, device = cairo_pdf,
 # Plot distance of dominant TSS to annotated start codon
 dominant <- dominant_tss(exp, threshold = 3, feature_type = "geneId", samples = c("S288C_100ng_1","S288C_diamide_100ng_1"))
 
-p <- plot_dominant_tss(dominant)
+p <- plot_dominant_tss(dominant) +
+	theme(text = element_text(size = 12))
 
-ggsave("dominant_tss.pdf", plot = p, device = cairo_pdf, height = 4, width = 4)
+ggsave(file.path(diamide_dir, "dominant_tss.pdf"), plot = p, device = cairo_pdf, height = 3, width = 3)
 
 # Plot hypothetical maximum 5'UTR length
 max <- max_utr(exp, threshold = 3, feature_type = "geneId", samples = c("S288C_100ng_1","S288C_diamide_100ng_1"))
