@@ -279,17 +279,17 @@ exp <- annotate_features(exp, annotation_file = annotation, data_type = "tsr", f
 tsr_distribution <- genomic_distribution(exp, data_type = "tsr", threshold = 3, samples = "S288C_100ng_1")
 
 p <- plot_genomic_distribution(tsr_distribution) +
-    ggplot2::theme(text = element_text(size = 6), legend.key.size = unit(0.4, "cm"))
+    ggplot2::theme(text = element_text(size = 12), legend.key.size = unit(0.6, "cm"))
 
-ggsave("tsr_genomic_distribution.pdf", plot = p, device = cairo_pdf, height = 3, width = 4)
+ggsave("tsr_genomic_distribution.pdf", plot = p, device = cairo_pdf, height = 2, width = 6)
 
 tsr_distribution <- genomic_distribution(exp, data_type = "tsr", threshold = 3, quantiles = 5, 
                                          samples = stripe)
 
 p <- plot_genomic_distribution(tsr_distribution, sample_order = stripe) +
-    ggplot2::theme(text = element_text(size = 6), legend.key.size = unit(0.4, "cm"))
+    ggplot2::theme(text = element_text(size = 14), legend.key.size = unit(0.8, "cm"))
 
-ggsave("tsr_genomic_distribution_quantiles.pdf", plot = p, device = cairo_pdf, height = 1.5, width = 4)
+ggsave("tsr_genomic_distribution_quantiles.pdf", plot = p, device = cairo_pdf, height = 12, width = 6)
 
 # Plot number of promoter-proximal features with a TSR
 features <- detect_features(exp, data_type = "tsr", feature_type = "transcript", samples = stripe)
