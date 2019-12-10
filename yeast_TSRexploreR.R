@@ -415,21 +415,22 @@ ggsave(file.path(cage_dir, "tsr_feature_plot.pdf"), plot = p, device = cairo_pdf
 ### Diamide analysis ###
 ########################
 
+diamide_dir <- file.path("yeast_work", "diamide")
+
 if (!dir.exists(file.path(baseDir, "yeast_work/diamide/"))){
-  print("Creating directory 'yeast_work/diamide' and changing working directory...")
-  dir.create(file.path(baseDir, "yeast_work/diamide/"))
-  setwd(file.path(baseDir, "yeast_work/diamide/"))
+  message("Creating directory 'yeast_work/diamide' and changing working directory...")
+  dir.create(file.path("yeast_work", "diamide"))
 } else {
   print("Directory 'yeast_work/diamide' already exists, changing working directory...")
-  setwd(file.path(baseDir, "yeast_work/diamide/"))
 }
+
 # Normalize TSS counts
 exp <- count_normalization(exp, data_type = "tss", threshold = 3, n_samples = 1, samples = diamide)
 
 # Generate a hierarchically clustered TSS heatmap with correlation values displayed
 corr_matrix <- find_correlation(exp, data_type = "tss", correlation_metric = "pearson")
 
-cairo_pdf(file = "tss_correlation_hierarchical.pdf", width = 9, height = 9)
+cairo_pdf(file = file.path(diamide_dir, "tss_correlation_hierarchical.pdf"), width = 9, height = 9)
 Heatmap(corr_matrix, col = viridis(256), heatmap_legend_param = list(title = "PCC"), 
         layer_fun = function(j, i, x, y, width, height, fill)
         {
@@ -447,9 +448,9 @@ tss_distribution <- genomic_distribution(exp, data_type = "tss", threshold = 3,
                                          samples = diamide)
 
 p <- plot_genomic_distribution(tss_distribution, sample_order = diamide) +
-    ggplot2::theme(text = element_text(size = 6), legend.key.size = unit(0.4, "cm"))
+    ggplot2::theme(text = element_text(size = 14), legend.key.size = unit(0.8, "cm"))
 
-ggsave("tss_genomic_distribution.pdf", plot = p, device = cairo_pdf, height = 3, width = 4)
+ggsave(file.path(diamide_dir, "tss_genomic_distribution.pdf"), plot = p, device = cairo_pdf, height = 4.5, width = 6)
 
 # Plot number of promoter-proximal features with a TSS
 features <- detect_features(exp, data_type = "tss", feature_type = "transcript", threshold = 3, 
