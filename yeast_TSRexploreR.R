@@ -382,7 +382,7 @@ ggsave(file.path(cage_dir, "tsr_correlation.png"), plot = p, device = "png", typ
 # Generate a hierarchically clustered TSR heatmap with correlation values displayed
 corr_matrix <- find_correlation(exp, data_type = "tsr", correlation_metric = "spearman")
 
-cairo_pdf(file = "tsr_correlation_hierarchical.pdf", width = 22.5, height = 22.5)
+cairo_pdf(file = file.path(cage_dir, "tsr_correlation_hierarchical.pdf"), width = 22.5, height = 22.5)
 Heatmap(corr_matrix, col = viridis(256), heatmap_legend_param = list(title = "Spearman"), 
         layer_fun = function(j, i, x, y, width, height, fill)
         {
@@ -399,17 +399,17 @@ tsr_distribution <- genomic_distribution(exp, data_type = "tsr", threshold = 3,
                                          samples = cage)
 
 p <- plot_genomic_distribution(tsr_distribution, sample_order = cage) +
-    ggplot2::theme(text = element_text(size = 6), legend.key.size = unit(0.4, "cm"))
+    ggplot2::theme(text = element_text(size = 12), legend.key.size = unit(0.6, "cm"))
 
-ggsave("tsr_genomic_distribution.pdf", plot = p, device = cairo_pdf, height = 3, width = 4)
+ggsave(file.path(cage_dir, "tsr_genomic_distribution.pdf"), plot = p, device = cairo_pdf, height = 6, width = 6)
 
 # Plot number of promoter-proximal features with a TSR
 features <- detect_features(exp, data_type = "tsr", feature_type = "transcript", samples = cage)
 
-p <- plot_detected_features(features, ncol = 3) +
-    ggplot2::theme(text = element_text(size = 5), legend.key.size = unit(0.4, "cm"))
+p <- plot_detected_features(features, ncol = 3, width = 0.75) +
+    ggplot2::theme(text = element_text(size = 14), legend.key.size = unit(0.8, "cm"))
 
-ggsave("tsr_feature_plot.pdf", plot = p, device = cairo_pdf, height = 5, width = 6)
+ggsave(file.path(cage_dir, "tsr_feature_plot.pdf"), plot = p, device = cairo_pdf, height = 4.5, width = 8)
 
 ########################
 ### Diamide analysis ###
