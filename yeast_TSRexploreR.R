@@ -480,9 +480,10 @@ ggsave(file.path(diamide_dir, "dominant_tss.pdf"), plot = p, device = cairo_pdf,
 # Plot hypothetical maximum 5'UTR length
 max <- max_utr(exp, threshold = 3, feature_type = "geneId", samples = c("S288C_100ng_1","S288C_diamide_100ng_1"))
 
-p <- plot_max_utr(max)
+p <- plot_max_utr(max) +
+	theme(text = element_text(size = 12))
 
-ggsave("max_utr.pdf", plot = p, device = cairo_pdf, height = 4, width = 4)
+ggsave(file.path(diamide_dir, "max_utr.pdf"), plot = p, device = cairo_pdf, height = 3, width = 3)
 
 # Export normalized TSS bedGraphs
 export.bedGraph(exp@counts$TSSs$cpm$S288C_diamide_100ng_1[strand(exp@counts$TSSs$cpm$S288C_diamide_100ng_1) == "+"], 
