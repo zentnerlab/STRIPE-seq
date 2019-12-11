@@ -189,16 +189,18 @@ ggsave(file.path(stripe_dir, "tss_dinucleotide_frequencies.pdf"), plot = p, devi
 # Plot distance of dominant TSS to annotated start codon
 dominant <- dominant_tss(exp, threshold = 3, feature_type = "geneId", samples = "K562_100ng_1")
 
-p <- plot_dominant_tss(dominant)
+p <- plot_dominant_tss(dominant) +
+	theme(text = element_text(size = 12))
 
-ggsave("dominant_tss.pdf", plot = p, device = cairo_pdf, height = 4, width = 4)
+ggsave(file.path(stripe_dir, "dominant_tss.pdf"), plot = p, device = cairo_pdf, height = 3, width = 3)
 
 # Plot hypothetical maximum 5'UTR length
 max <- max_utr(exp, threshold = 3, feature_type = "geneId", samples = "K562_100ng_1")
 
-p <- plot_max_utr(max)
+p <- plot_max_utr(max) +
+	theme(text = element_text(size = 12))
 
-ggsave("max_utr.pdf", plot = p, device = cairo_pdf, height = 4, width = 4)
+ggsave(file.path(stripe_dir, "max_utr.pdf"), plot = p, device = cairo_pdf, height = 3, width = 3)
 
 # Export normalized TSS bedGraphs
 
