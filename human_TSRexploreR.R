@@ -154,21 +154,19 @@ p <- plot_average(exp, data_type = "tss", threshold = 3, samples = "K562_100ng_1
 ggsave(file.path(stripe_dir, "tss_average_plot.pdf"), plot = p, cairo_pdf, height = 2.5, width = 3.5)
 
 # Generate TSS sequence logos
-seqs <- tss_sequences(exp, genome_assembly = file.path(baseDir, "Homo_sapiens.GRCh38.dna.primary_assembly.fa"),
+seqs <- tss_sequences(exp, genome_assembly = "Homo_sapiens.GRCh38.dna_sm.primary_assembly.fa",
                       threshold = 3, samples = stripe)
 
-p <- plot_sequence_logo(seqs, ncol = 1) +
-    ggplot2::theme(text = element_text(size = 5))
+p <- plot_sequence_logo(seqs, ncol = 1, font_size = 10)
 
-ggsave("tss_seq_logo.pdf", plot = p, device = cairo_pdf, height = 5, width = 5)
+ggsave(file.path(stripe_dir, "tss_seq_logo.pdf"), plot = p, device = cairo_pdf, height = 3, width = 4)
 
-seqs <- tss_sequences(exp, genome_assembly = file.path(baseDir, "Homo_sapiens.GRCh38.dna.primary_assembly.fa"),
+seqs <- tss_sequences(exp, genome_assembly = "Homo_sapiens.GRCh38.dna_sm.primary_assembly.fa",
                       threshold = 3, quantiles = 5, samples = "K562_100ng_1")
 
-p <- plot_sequence_logo(seqs, ncol = 1) +
-    ggplot2::theme(text = element_text(size = 5))
+p <- plot_sequence_logo(seqs, ncol = 1, font_size = 10) +
 
-ggsave("tss_seq_logo_quantiles.pdf", plot = p, device = cairo_pdf, height = 5, width = 5)
+ggsave(file.path(stripe_dir, "tss_seq_logo_quantiles.pdf"), plot = p, device = cairo_pdf, height = 6, width = 4)
 
 # Generate TSS color plot
 seqs <- tss_sequences(exp, genome_assembly = file.path(baseDir, "Homo_sapiens.GRCh38.dna.primary_assembly.fa"),
