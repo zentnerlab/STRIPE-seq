@@ -178,13 +178,13 @@ p <- plot_sequence_colormap(seqs, ncol = 3) +
 ggsave("tss_seq_colormap.png", plot = p, device = "png", type = "cairo", height = 2.5, width = 2)
 
 # Assess TSS dinucleotide frequencies
-frequencies <- dinucleotide_frequencies(exp, genome_assembly = file.path(baseDir, "Homo_sapiens.GRCh38.dna.primary_assembly.fa"),
+frequencies <- dinucleotide_frequencies(exp, genome_assembly = "Homo_sapiens.GRCh38.dna_sm.primary_assembly.fa",
                                         threshold = 3, samples = stripe)
 
 p <- plot_dinucleotide_frequencies(frequencies, ncol = 3, sample_order = stripe) +
-    ggplot2::theme(text = element_text(size = 6), legend.key.size = unit(0.4, "cm"))
+    ggplot2::theme(text = element_text(size = 12), legend.key.size = unit(0.6, "cm"))
 
-ggsave("tss_dinucleotide_frequencies.pdf", plot = p, device = cairo_pdf, height = 1.7, width = 2.5)
+ggsave(file.path(stripe_dir, "tss_dinucleotide_frequencies.pdf"), plot = p, device = cairo_pdf, height = 2.75, width = 7)
 
 # Plot distance of dominant TSS to annotated start codon
 dominant <- dominant_tss(exp, threshold = 3, feature_type = "geneId", samples = "K562_100ng_1")
