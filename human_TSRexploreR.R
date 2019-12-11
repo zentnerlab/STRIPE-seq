@@ -126,17 +126,17 @@ ggsave(file.path(stripe_dir, "tss_thresholds.pdf"), plot = p, device = cairo_pdf
 tss_distribution <- genomic_distribution(exp, data_type = "tss", threshold = 3, samples = stripe)
 
 p <- plot_genomic_distribution(tss_distribution, sample_order = stripe) +
-    ggplot2::theme(text = element_text(size = 6), legend.key.size = unit(0.4, "cm"))
+    ggplot2::theme(text = element_text(size = 14), legend.key.size = unit(0.8, "cm"))
 
-ggsave("tss_genomic_distribution.pdf", plot = p, device = cairo_pdf, height = 2.6, width = 4)
+ggsave(file.path(stripe_dir, "tss_genomic_distribution.pdf"), plot = p, device = cairo_pdf, height = 2.5, width = 6)
 
 genomic_dist <- genomic_distribution(exp, data_type = "tss", threshold = 3, quantiles = 5, 
                                      samples = "K562_100ng_1")
 
 p <- plot_genomic_distribution(genomic_dist) +
-    ggplot2::theme(text = element_text(size = 6), legend.key.size = unit(0.4, "cm"))
+    ggplot2::theme(text = element_text(size = 14), legend.key.size = unit(0.8, "cm"))
 
-ggsave("tss_genomic_distribution_quantiles.pdf", plot = p, device = cairo_pdf, height = 1.7, width = 4)
+ggsave(file.path(stripe_dir, "tss_genomic_distribution_quantiles.pdf"), plot = p, device = cairo_pdf, height = 4, width = 6)
 
 # Plot number of promoter-proximal features with a TSS
 features <- detect_features(exp, data_type = "tss", feature_type = "transcript", threshold = 3, 
