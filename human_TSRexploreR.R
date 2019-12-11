@@ -89,11 +89,11 @@ if (!dir.exists(stripe_dir)){
 exp <- count_normalization(exp, data_type = "tss", threshold = 3, n_samples = 1, samples = stripe)
 
 # Generate a combinbed TSS correlation plot
-p <- plot_correlation(exp, data_type = "tss") +
+p <- plot_correlation(exp, data_type = "tss", font_size = 4, pt_size = 0.5) +
     ggplot2::theme_bw() +
     ggplot2::theme(text = element_text(size = 6))
 
-ggsave("tss_correlation.png", plot = p, device = "png", type = "cairo", height = 12, width = 12)
+ggsave(file.path(stripe_dir, "tss_correlation.png"), plot = p, device = "png", type = "cairo", height = 4, width = 4)
 
 # Generate a hierarchically clustered TSS heatmap with correlation values displayed
 corr_matrix <- find_correlation(exp, data_type = "tss", correlation_metric = "pearson")
