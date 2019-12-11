@@ -229,16 +229,16 @@ iwalk(exp@counts$TSSs$cpm, function(counts, sample) {
 exp <- count_normalization(exp, data_type = "tsr", threshold = 3, n_samples = 1, samples = stripe)
 
 # Generate a combinbed TSR correlation plot
-p <- plot_correlation(exp, data_type = "tsr") +
+p <- plot_correlation(exp, data_type = "tsr", font_size = 3, pt_size = 0.5) +
     ggplot2::theme_bw() +
     ggplot2::theme(text = element_text(size = 6))
 
-ggsave("tsr_correlation.png", plot = p, device = "cairo", height = 12, width = 12)
+ggsave(file.path(stripe_dir, "tsr_correlation.png"), plot = p, device = "png", type = "cairo", height = 3, width = 3)
 
 # Generate a hierarchically clustered TSR heatmap with correlation values displayed
 corr_matrix <- find_correlation(exp, data_type = "tsr", correlation_metric = "pearson")
 
-cairo_pdf(file = "tsr_correlation_hierarchical.pdf", width = 4, height = 4)
+cairo_pdf(file = file.path(stripe_dir, "tsr_correlation_hierarchical.pdf"), width = 4, height = 4)
 Heatmap(corr_matrix, col = viridis(256), heatmap_legend_param = list(title = "PCC"), 
         layer_fun = function(j, i, x, y, width, height, fill)
         {
