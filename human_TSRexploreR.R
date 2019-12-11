@@ -108,7 +108,7 @@ Heatmap(corr_matrix, col = viridis(256), heatmap_legend_param = list(title = "PC
 dev.off()
 
 # Annotate TSSs relative to genomic features
-exp <- annotate_features(exp, annotation_file = file.path(baseDir, "Homo_sapiens.GRCh38.98.gtf"),
+exp <- annotate_features(exp, annotation_file = "Homo_sapiens.GRCh38.98.gtf",
                          data_type = "tss", feature_type = "transcript", upstream = 500, downstream = 500)
 
 # Explore TSS read thresholds for promoter fraction and plot
