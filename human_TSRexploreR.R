@@ -9,14 +9,11 @@ library(rtracklayer)
 # devtools::install_github("rpolicastro/tsrexplorer", ref = "dev", force = TRUE)
 
 # Set base directory for analysis
-baseDir <- "/Users/gzentner/Desktop/tsrexplorer/STRIPE-seq/"
-setwd(baseDir)
-
-if (!dir.exists(file.path(baseDir, "human_work/"))){
-  print("Creating directory 'human_work'...")
-  dir.create(file.path(baseDir, "human_work/"))
+if (!dir.exists("human_work")){
+  message("Creating directory 'human_work'...")
+  dir.create("human_work")
 } else {
-  print("Directory 'human_work' already exists...")
+  message("Directory 'human_work' already exists...")
 }
 
 ####################
@@ -25,14 +22,12 @@ if (!dir.exists(file.path(baseDir, "human_work/"))){
 
 # STRIPE-seq TSSs
 STRIPE_TSSs <- map(list.files("human_data/STRIPE_TSSs/", full.names = TRUE), ~ read.delim(.x) %>%
-                      as.data.frame %>%
                       makeGRangesFromDataFrame(keep.extra.columns = TRUE, seqnames.field = "seq", 
                              start.field = "TSS", end.field = "TSS")) %>%
     set_names(c("K562_100ng_1","K562_100ng_2","K562_100ng_3"))
 
 # nanoCAGE-XL, CAGE, and RAMPAGE TSSs
 CAGE_TSSs <- map(list.files("human_data/CAGE_TSSs/", full.names = TRUE), ~ read.delim(.x) %>%
-                     as.data.frame %>%
                      makeGRangesFromDataFrame(keep.extra.columns = TRUE, seqnames.field = "seq", 
                                               start.field = "TSS", end.field = "TSS")) %>%
     set_names(c("nanoCAGE_XL_7.5ug_1",
@@ -48,14 +43,12 @@ full_TSS_set <- c(STRIPE_TSSs,CAGE_TSSs)
 
 # STRIPE-seq TSRs
 STRIPE_TSRs <- map(list.files("human_data/STRIPE_TSRs/", full.names = TRUE), ~ read.delim(.x) %>%
-                      as.data.frame %>%
                       makeGRangesFromDataFrame(keep.extra.columns = TRUE, seqnames.field = "seq", 
                                                start.field = "start", end.field = "end")) %>%
   set_names(c("K562_100ng_1","K562_100ng_2","K562_100ng_3"))
 
 # nanoCAGE-XL, CAGE, and RAMPAGE TSRs
 CAGE_TSRs <- map(list.files("human_data/CAGE_TSRs/", full.names = TRUE), ~ read.delim(.x) %>%
-                     as.data.frame %>%
                      makeGRangesFromDataFrame(keep.extra.columns = TRUE, seqnames.field = "seq", 
                                               start.field = "start", end.field = "end")) %>%
   set_names(c("nanoCAGE_XL_7.5ug_1",
@@ -83,13 +76,13 @@ exp <- tsr_explorer(full_TSS_set,full_TSR_set)
 ### K562 replicate analysis ###
 ###############################
 
-if (!dir.exists(file.path(baseDir, "human_work/STRIPE/"))){
-  print("Creating directory 'human_work/STRIPE' and changing working directory...")
-  dir.create(file.path(baseDir, "human_work/STRIPE/"))
-  setwd(file.path(baseDir, "human_work/STRIPE/"))
+stripe_dir <- file.path("human_work", "STRIPE")
+
+if (!dir.exists(stripe_dir)){
+  print("Creating directory 'human_work/STRIPE'")
+  dir.create(stripe_dir)
 } else {
-  print("Directory 'human_work/STRIPE' already exists, changing working directory...")
-  setwd(file.path(baseDir, "human_work/STRIPE/"))
+  print("Directory 'human_work/STRIPE' already exists")
 }
 
 # Normalize TSS counts
