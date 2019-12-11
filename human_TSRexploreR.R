@@ -204,25 +204,26 @@ ggsave(file.path(stripe_dir, "max_utr.pdf"), plot = p, device = cairo_pdf, heigh
 
 # Export normalized TSS bedGraphs
 
-if (!dir.exists(file.path(baseDir, "human_work/bedgraphs/"))){
-  print("Creating directory 'human_work/bedgraphs'...")
-  dir.create(file.path(baseDir, "human_work/bedgraphs/"))
+bedgraph_dir <- file.path("human_work", "bedgraphs")
+
+if (!dir.exists(bedgraph_dir)){
+  message("Creating directory 'human_work/bedgraphs'...")
+  dir.create(bedgraph_dir)
 } else {
-  print("Directory 'human_work/bedgraphs' already exists...")
+  message("Directory 'human_work/bedgraphs' already exists...")
 }
 
-export.bedGraph(exp@counts$TSSs$cpm$K562_100ng_1[strand(exp@counts$TSSs$cpm$K562_100ng_1) == "+"], 
-                file.path(baseDir, "human_work/bedgraphs/K562_100ng_1_+.bedgraph"))
-export.bedGraph(exp@counts$TSSs$cpm$K562_100ng_1[strand(exp@counts$TSSs$cpm$K562_100ng_1) == "-"], 
-                file.path(baseDir, "human_work/bedgraphs/K562_100ng_1_-.bedgraph"))
-export.bedGraph(exp@counts$TSSs$cpm$K562_100ng_2[strand(exp@counts$TSSs$cpm$K562_100ng_2) == "+"], 
-                file.path(baseDir, "human_work/bedgraphs/K562_100ng_2_+.bedgraph"))
-export.bedGraph(exp@counts$TSSs$cpm$K562_100ng_2[strand(exp@counts$TSSs$cpm$K562_100ng_2) == "-"], 
-                file.path(baseDir, "human_work/bedgraphs/K562_100ng_2_-.bedgraph"))
-export.bedGraph(exp@counts$TSSs$cpm$K562_100ng_3[strand(exp@counts$TSSs$cpm$K562_100ng_3) == "+"], 
-                file.path(baseDir, "human_work/bedgraphs/K562_100ng_3_+.bedgraph"))
-export.bedGraph(exp@counts$TSSs$cpm$K562_100ng_3[strand(exp@counts$TSSs$cpm$K562_100ng_3) == "-"], 
-                file.path(baseDir, "human_work/bedgraphs/K562_100ng_3_-.bedgraph"))
+iwalk(exp@counts$TSSs$cpm, function(counts, sample) {
+	pos <- counts[strand(counts) == "+"]
+	min <- counts[strand(counts) == "-"]
+
+	export(pos, file.path(bedgraph_dir, paste(sample, "pos.bedgraph", sep = "_")), format = "bedgraph")
+	export(min, file.path(bedgraph_dir, paste(sample, "min.bedgraph", sep = "_")), format = "bedgraph")
+})
+
+##################
+## TSR Analysis ##
+##################
 
 # Normalize TSR counts
 exp <- count_normalization(exp, data_type = "tsr", threshold = 3, n_samples = 1, samples = stripe)
