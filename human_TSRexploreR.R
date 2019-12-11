@@ -98,7 +98,7 @@ ggsave(file.path(stripe_dir, "tss_correlation.png"), plot = p, device = "png", t
 # Generate a hierarchically clustered TSS heatmap with correlation values displayed
 corr_matrix <- find_correlation(exp, data_type = "tss", correlation_metric = "pearson")
 
-cairo_pdf(file = "tss_correlation_hierarchical.pdf", width = 4, height = 4)
+cairo_pdf(file = file.path(stripe_dir, "tss_correlation_hierarchical.pdf"), width = 4, height = 4)
 Heatmap(corr_matrix, col = viridis(256), heatmap_legend_param = list(title = "PCC"), 
         layer_fun = function(j, i, x, y, width, height, fill)
         {
@@ -108,19 +108,19 @@ Heatmap(corr_matrix, col = viridis(256), heatmap_legend_param = list(title = "PC
 dev.off()
 
 # Annotate TSSs relative to genomic features
-exp <- annotate_features(exp, annotation_file = "Homo_sapiens.GRCh38.98.gtf",
+exp <- annotate_features(exp, annotation_file = "Homo_sapiens.GRCh38.98.chr.gtf",
                          data_type = "tss", feature_type = "transcript", upstream = 500, downstream = 500)
 
 # Explore TSS read thresholds for promoter fraction and plot
-thresh <- explore_thresholds(exp, annotation_file = file.path(baseDir, "Homo_sapiens.GRCh38.98.gtf"), 
+thresh <- explore_thresholds(exp, annotation_file = "Homo_sapiens.GRCh38.98.chr.gtf", 
                              feature_type = "transcript", max_threshold = 25, 
                              upstream = 500, downstream = 500, samples = stripe)
 
-p <- plot_threshold_exploration(thresh, ncol = 3, point_size = 2, sample_order = stripe) +
+p <- plot_threshold_exploration(thresh, ncol = 3, point_size = 1.5, sample_order = stripe) +
     ggplot2::geom_vline(xintercept = 3, lty = 2) +
-    ggplot2::theme(legend.key.size = unit(0.4, "cm"))
+    ggplot2::theme(legend.key.size = unit(0.6, "cm"), text = element_text(size = 12))
 
-ggsave("tss_thresholds.pdf", plot = p, device = cairo_pdf, height = 3, width = 12)
+ggsave(file.path(stripe_dir, "tss_thresholds.pdf"), plot = p, device = cairo_pdf, height = 2, width = 10)
 
 # Determine TSS distribution relative to genomic features
 tss_distribution <- genomic_distribution(exp, data_type = "tss", threshold = 3, samples = stripe)
