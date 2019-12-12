@@ -338,13 +338,13 @@ p <- plot_detected_features(features, ncol = 2, width = 0.75) +
 ggsave(file.path(cage_dir, "tss_feature_plot.pdf"), plot = p, device = cairo_pdf, height = 4.5, width = 8)
 
 # Assess TSS dinucleotide frequencies
-frequencies <- dinucleotide_frequencies(exp, genome_assembly = file.path(baseDir, "Homo_sapiens.GRCh38.dna.primary_assembly.fa"),
+frequencies <- dinucleotide_frequencies(exp, genome_assembly = "Homo_sapiens.GRCh38.dna_sm.primary_assembly.fa",
                                         threshold = 3, samples = all)
 
 p <- plot_dinucleotide_frequencies(frequencies, ncol = 2, sample_order = all) +
-    ggplot2::theme(text = element_text(size = 6), legend.key.size = unit(0.4, "cm"))
+    ggplot2::theme(text = element_text(size = 12), legend.key.size = unit(0.8, "cm"))
 
-ggsave("tss_dinucleotide_frequencies.pdf", plot = p, device = cairo_pdf, height = 6, width = 4)
+ggsave(file.path(cage_dir, "tss_dinucleotide_frequencies.pdf"), plot = p, device = cairo_pdf, height = 8.5, width = 5.5)
 
 # Export normalized TSS bedGraphs
 
