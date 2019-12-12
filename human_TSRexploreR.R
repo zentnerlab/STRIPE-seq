@@ -409,10 +409,10 @@ ggsave(file.path(cage_dir, "tsr_genomic_distribution.pdf"), plot = p, device = c
 features <- detect_features(exp, data_type = "tsr", feature_type = "transcript", 
                             samples = all, downstream = 500, upstream = 500)
 
-p <- plot_detected_features(features, ncol = 2) +
-  ggplot2::theme(text = element_text(size = 5), legend.key.size = unit(0.4, "cm"))
+p <- plot_detected_features(features, ncol = 2, width = 0.75) +
+  ggplot2::theme(text = element_text(size = 14), legend.key.size = unit(0.8, "cm"))
 
-ggsave("tsr_feature_plot.pdf", plot = p, device = cairo_pdf, height = 4, width = 3)
+ggsave(file.path(cage_dir, "tsr_feature_plot.pdf"), plot = p, device = cairo_pdf, height = 4.5, width = 6.5)
 
 ########################
 ### RNA-seq analysis ###
