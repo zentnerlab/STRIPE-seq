@@ -324,9 +324,9 @@ tss_distribution <- genomic_distribution(exp, data_type = "tss", threshold = 3,
                                          samples = all)
 
 p <- plot_genomic_distribution(tss_distribution, sample_order = all) +
-    ggplot2::theme(text = element_text(size = 6), legend.key.size = unit(0.4, "cm"))
+    ggplot2::theme(text = element_text(size = 14), legend.key.size = unit(0.8, "cm"))
 
-ggsave("tss_genomic_distribution.pdf", plot = p, device = cairo_pdf, height = 2.6, width = 4)
+ggsave(file.path(cage_dir, "tss_genomic_distribution.pdf"), plot = p, device = cairo_pdf, height = 4.5, width = 6)
 
 # Plot number of promoter-proximal features with a TSS
 features <- detect_features(exp, data_type = "tss", feature_type = "transcript", 
