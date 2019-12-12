@@ -292,32 +292,32 @@ ggsave(file.path(stripe_dir, "tsr_average_plot.pdf"), plot = p, device = cairo_p
 ### STRIPE-seq vs. CAGE analysis ###
 ####################################
 
-if (!dir.exists(file.path(baseDir, "human_work/CAGE/"))){
-  print("Creating directory 'human_work/CAGE' and changing working directory...")
-  dir.create(file.path(baseDir, "human_work/CAGE/"))
-  setwd(file.path(baseDir, "human_work/CAGE/"))
+cage_dir <- file.path("human_work", "CAGE")
+
+if (!dir.exists(cage_dir)){
+  message("Creating directory 'human_work/CAGE'...")
+  dir.create(cage_dir)
 } else {
-  print("Directory 'human_work/CAGE' already exists, changing working directory...")
-  setwd(file.path(baseDir, "human_work/CAGE/"))
+  message("Directory 'human_work/CAGE'...")
 }
 
 # Normalize TSS counts
 exp <- count_normalization(exp, data_type = "tss", threshold = 3, n_samples = 1, samples = all)
 
 # Annotate TSSs
-exp <- annotate_features(exp, annotation_file = file.path(baseDir, "Homo_sapiens.GRCh38.98.gtf"),
+exp <- annotate_features(exp, annotation_file = "Homo_sapiens.GRCh38.98.chr.gtf",
                          data_type = "tss", feature_type = "transcript", upstream = 500, downstream = 500)
 
 # Explore TSS read thresholds for promoter fraction and plot
-thresh <- explore_thresholds(exp, annotation_file = file.path(baseDir, "Homo_sapiens.GRCh38.98.gtf"), 
+thresh <- explore_thresholds(exp, annotation_file = "Homo_sapiens.GRCh38.98.chr.gtf", 
                              feature_type = "transcript", max_threshold = 25, 
                              upstream = 500, downstream = 500, samples = all)
 
-p <- plot_threshold_exploration(thresh, ncol = 3, point_size = 2, sample_order = all) +
+p <- plot_threshold_exploration(thresh, ncol = 3, point_size = 1.5, sample_order = all) +
     ggplot2::geom_vline(xintercept = 3, lty = 2) +
-    ggplot2::theme(legend.key.size = unit(0.4, "cm"))
+    ggplot2::theme(legend.key.size = unit(0.8, "cm"), text = element_text(size = 12))
 
-ggsave("tss_thresholds.pdf", plot = p, device = cairo_pdf, height = 8, width = 12)
+ggsave(file.path(cage_dir, "tss_thresholds.pdf"), plot = p, device = cairo_pdf, height = 5, width = 10)
 
 # Determine TSS distribution relative to genomic features
 tss_distribution <- genomic_distribution(exp, data_type = "tss", threshold = 3, 
