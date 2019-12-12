@@ -278,9 +278,9 @@ ggsave(file.path(stripe_dir, "tsr_feature_plot.pdf"), plot = p, device = cairo_p
 # Plot selected TSR metrics
 p <- plot_tsr_metric(exp, tsr_metrics = "nTSSs", log2_transform = TRUE, ncol = 1, plot_type = "boxjitter",
                      size = 0.5, samples = "K562_100ng_1") +
-    ggplot2::theme(text = element_text(size = 6), legend.key.size = unit(0.4, "cm"))
+    ggplot2::theme(text = element_text(size = 14), legend.key.size = unit(0.8, "cm"))
 
-ggsave("tsr_metrics.pdf", plot = p, device = cairo_pdf, width = 7, height = 7)
+ggsave(file.path(stripe_dir, "tsr_metrics.pdf"), plot = p, device = cairo_pdf, width = 3.5, height = 4)
 
 # Generate TSR average plot
 p <- plot_average(exp, data_type = "tsr", samples = "K562_100ng_1", upstream = 1000, downstream = 1000) +
