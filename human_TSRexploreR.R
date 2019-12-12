@@ -332,10 +332,10 @@ ggsave(file.path(cage_dir, "tss_genomic_distribution.pdf"), plot = p, device = c
 features <- detect_features(exp, data_type = "tss", feature_type = "transcript", 
                             samples = all, upstream = 500, downstream = 500)
 
-p <- plot_detected_features(features, ncol = 2) +
-    ggplot2::theme(text = element_text(size = 5), legend.key.size = unit(0.4, "cm"))
+p <- plot_detected_features(features, ncol = 2, width = 0.75) +
+    ggplot2::theme(text = element_text(size = 14), legend.key.size = unit(0.8, "cm"))
 
-ggsave("tss_feature_plot.pdf", plot = p, device = cairo_pdf, height = 3, width = 4)
+ggsave(file.path(cage_dir, "tss_feature_plot.pdf"), plot = p, device = cairo_pdf, height = 4.5, width = 8)
 
 # Assess TSS dinucleotide frequencies
 frequencies <- dinucleotide_frequencies(exp, genome_assembly = file.path(baseDir, "Homo_sapiens.GRCh38.dna.primary_assembly.fa"),
