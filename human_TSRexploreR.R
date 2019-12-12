@@ -248,24 +248,24 @@ Heatmap(corr_matrix, col = viridis(256), heatmap_legend_param = list(title = "PC
 dev.off()
 
 # Annotate TSRs
-exp <- annotate_features(exp, annotation_file = file.path(baseDir, "Homo_sapiens.GRCh38.98.gtf"),
+exp <- annotate_features(exp, annotation_file = "Homo_sapiens.GRCh38.98.chr.gtf",
                          data_type = "tsr", feature_type = "transcript", upstream = 500, downstream = 500)
 
 # Determine TSR distribution relative to genomic features
 tsr_distribution <- genomic_distribution(exp, data_type = "tsr", threshold = 3, samples = "K562_100ng_1")
 
 p <- plot_genomic_distribution(tsr_distribution) +
-    ggplot2::theme(text = element_text(size = 6), legend.key.size = unit(0.4, "cm"))
+    ggplot2::theme(text = element_text(size = 14), legend.key.size = unit(0.8, "cm"))
 
-ggsave("tsr_genomic_distribution.pdf", plot = p, device = cairo_pdf, height = 2.6, width = 4)
+ggsave(file.path(stripe_dir, "tsr_genomic_distribution.pdf"), plot = p, device = cairo_pdf, height = 2, width = 6)
 
 tsr_distribution <- genomic_distribution(exp, data_type = "tsr", threshold = 3, quantiles = 5, 
                                          samples = "K562_100ng_1")
 
 p <- plot_genomic_distribution(tsr_distribution) +
-    ggplot2::theme(text = element_text(size = 6), legend.key.size = unit(0.4, "cm"))
+    ggplot2::theme(text = element_text(size = 14), legend.key.size = unit(0.8, "cm"))
 
-ggsave("tsr_genomic_distribution_quantiles.pdf", plot = p, device = cairo_pdf, height = 1.7, width = 4)
+ggsave(file.path(stripe_dir, "tsr_genomic_distribution_quantiles.pdf"), plot = p, device = cairo_pdf, height = 5, width = 6)
 
 # Plot number of promoter-proximal features with a TSR
 features <- detect_features(exp, data_type = "tsr", feature_type = "transcript", samples = "K562_100ng_1")
