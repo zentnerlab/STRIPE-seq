@@ -284,9 +284,9 @@ ggsave(file.path(stripe_dir, "tsr_metrics.pdf"), plot = p, device = cairo_pdf, w
 
 # Generate TSR average plot
 p <- plot_average(exp, data_type = "tsr", samples = "K562_100ng_1", upstream = 1000, downstream = 1000) +
-    ggplot2::theme(text = element_text(size = 6))
+    ggplot2::theme(text = element_text(size = 12))
 
-ggsave("tsr_average_plot.pdf", plot = p, device = cairo_pdf, height = 3, width = 3)
+ggsave(file.path(stripe_dir, "tsr_average_plot.pdf"), plot = p, device = cairo_pdf, height = 3, width = 3)
 
 ####################################
 ### STRIPE-seq vs. CAGE analysis ###
