@@ -366,11 +366,11 @@ iwalk(exp@counts$TSSs$cpm, function(counts, sample) {
 exp <- count_normalization(exp, data_type = "tsr", threshold = 3, n_samples = 1, samples = all)
 
 # Generate a combinbed TSR correlation plot
-p <- plot_correlation(exp, data_type = "tsr", correlation_metric = "spearman") +
+p <- plot_correlation(exp, data_type = "tsr", correlation_metric = "spearman", font_size = 2, pt_size = 0.5) +
     ggplot2::theme_bw() +
     ggplot2::theme(text = element_text(size = 6))
 
-ggsave("tsr_correlation.png", plot = p, device = "png", type = "cairo", height = 20, width = 20)
+ggsave(file.path(cage_dir, "tsr_correlation.png"), plot = p, device = "png", type = "cairo", height = 6, width = 6)
 
 # Generate a hierarchically clustered TSR heatmap with correlation values displayed
 corr_matrix <- find_correlation(exp, data_type = "tsr", correlation_metric = "spearman")
