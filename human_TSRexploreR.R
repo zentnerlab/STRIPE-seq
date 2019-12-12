@@ -270,10 +270,10 @@ ggsave(file.path(stripe_dir, "tsr_genomic_distribution_quantiles.pdf"), plot = p
 # Plot number of promoter-proximal features with a TSR
 features <- detect_features(exp, data_type = "tsr", feature_type = "transcript", samples = "K562_100ng_1")
 
-p <- plot_detected_features(features) +
-    ggplot2::theme(text = element_text(size = 5), legend.key.size = unit(0.4, "cm"))
+p <- plot_detected_features(features, width = 0.75) +
+    ggplot2::theme(text = element_text(size = 14), legend.key.size = unit(0.8, "cm"))
 
-ggsave("tsr_feature_plot.pdf", plot = p, device = cairo_pdf, height = 2, width = 4)
+ggsave(file.path(stripe_dir, "tsr_feature_plot.pdf"), plot = p, device = cairo_pdf, height = 1.5, width = 5)
 
 # Plot selected TSR metrics
 p <- plot_tsr_metric(exp, tsr_metrics = "nTSSs", log2_transform = TRUE, ncol = 1, plot_type = "boxjitter",
