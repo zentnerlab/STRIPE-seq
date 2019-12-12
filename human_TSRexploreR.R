@@ -418,18 +418,25 @@ ggsave(file.path(cage_dir, "tsr_feature_plot.pdf"), plot = p, device = cairo_pdf
 ### RNA-seq analysis ###
 ########################
 
-if (!dir.exists(file.path(baseDir, "human_work/RNA_seq/"))){
-    print("Creating directory 'human_work/RNA_seq' and changing working directory...")
-    dir.create(file.path(baseDir, "human_work/RNA_seq/"))
-    setwd(file.path(baseDir, "human_work/RNA_seq/"))
+rnaseq_dir <- file.path("human_work", "RNA_seq")
+
+if (!dir.exists(rnaseq_dir)){
+    message("Creating directory 'human_work/RNA_seq'...")
+    dir.create(rnaseq_dir)
 } else {
-    print("Directory 'human_work/RNA_seq' already exisits, changing working directory...")
-    setwd(file.path(baseDir, "human_work/RNA_seq/"))
+    message("Directory 'human_work/RNA_seq' already exisits...")
 }
 
 # Get feature counts for STRIPE-seq and RNA-seq
-stripe_counts <- read_tsv(file.path(baseDir, "human_data/RNA_seq/cleaned_K562_feature_counts_STRIPEseq.tsv"))
-rnaseq_counts <- read_tsv(file.path(baseDir, "human_data/RNA_seq/cleaned_human_feature_counts.tsv"))
+stripe_counts <- read.delim(
+	file.path("human_data", "RNA_seq", "cleaned_K562_feature_counts_STRIPEseq.tsv"),
+	sep = "\t", header = TRUE, stringsAsFactors = FALSE
+)
+
+rnaseq_counts <- read.delim(
+	file.path("human_data", "RNA_seq", "cleaned_human_feature_counts.tsv"),
+	sep = "\t", header = TRUE, stringsAsFactors = FALSE
+)
 
 stripe_counts <- column_to_rownames(stripe_counts, "Geneid") %>% as.matrix
 rnaseq_counts <- column_to_rownames(rnaseq_counts, "Geneid") %>% as.matrix
@@ -444,7 +451,7 @@ stripe_rnaseq_k562 <- c("GSF2268_s_SP52_K562_WT_100ng",	"GSF2268_s_SP53_K562_WT_
 # Find correlation of YPD STRIPE-seq and RNA-seq feature counts
 corr_matrix <- find_correlation(exp, data_type = "features", correlation_metric = "spearman", samples = stripe_rnaseq_k562)
 
-cairo_pdf(file = "tss_rnaseq_correlation_hierarchical.pdf", width = 10, height = 10)
+cairo_pdf(file = file.path(rnaseq_dir, "tss_rnaseq_correlation_hierarchical.pdf"), width = 10, height = 10)
 Heatmap(corr_matrix, col = viridis(256), heatmap_legend_param = list(title = "spearman"), 
         layer_fun = function(j, i, x, y, width, height, fill)
         {
