@@ -348,31 +348,19 @@ ggsave(file.path(cage_dir, "tss_dinucleotide_frequencies.pdf"), plot = p, device
 
 # Export normalized TSS bedGraphs
 
-# nanoCAGE-XL
-export.bedGraph(exp@counts$TSSs$cpm$nanoCAGE_XL_7.5ug_1[strand(exp@counts$TSSs$cpm$nanoCAGE_XL_7.5ug_1) == "+"], 
-                file.path(baseDir, "human_work/bedgraphs/nanoCAGE_XL_7.5ug_1_+.bedgraph"))
-export.bedGraph(exp@counts$TSSs$cpm$nanoCAGE_XL_7.5ug_1[strand(exp@counts$TSSs$cpm$nanoCAGE_XL_7.5ug_1) == "-"], 
-                file.path(baseDir, "human_work/bedgraphs/nanoCAGE_XL_7.5ug_1_-.bedgraph"))
+bedgraph_dir <- file.path("human_work", "bedgraphs")
 
-# CAGE
-export.bedGraph(exp@counts$TSSs$cpm$CAGE_10ug_1[strand(exp@counts$TSSs$cpm$CAGE_10ug_1) == "+"], 
-                file.path(baseDir, "human_work/bedgraphs/CAGE_10ug_1_+.bedgraph"))
-export.bedGraph(exp@counts$TSSs$cpm$CAGE_10ug_1[strand(exp@counts$TSSs$cpm$CAGE_10ug_1) == "-"], 
-                file.path(baseDir, "human_work/bedgraphs/CAGE_10ug_1_-.bedgraph"))
-export.bedGraph(exp@counts$TSSs$cpm$CAGE_10ug_2[strand(exp@counts$TSSs$cpm$CAGE_10ug_2) == "+"], 
-                file.path(baseDir, "human_work/bedgraphs/CAGE_10ug_2_+.bedgraph"))
-export.bedGraph(exp@counts$TSSs$cpm$CAGE_10ug_2[strand(exp@counts$TSSs$cpm$CAGE_10ug_2) == "-"], 
-                file.path(baseDir, "human_work/bedgraphs/CAGE_10ug_2_-.bedgraph"))
+iwalk(exp@counts$TSSs$cpm, function(counts, sample) {
+	pos <- counts[strand(counts) == "+"]
+	min <- counts[strand(counts) == "-"]
 
-# RAMPAGE
-export.bedGraph(exp@counts$TSSs$cpm$RAMPAGE_5ug_1[strand(exp@counts$TSSs$cpm$RAMPAGE_5ug_1) == "+"], 
-                file.path(baseDir, "human_work/bedgraphs/RAMPAGE_5ug_1_+.bedgraph"))
-export.bedGraph(exp@counts$TSSs$cpm$RAMPAGE_5ug_1[strand(exp@counts$TSSs$cpm$RAMPAGE_5ug_1) == "-"], 
-                file.path(baseDir, "human_work/bedgraphs/RAMPAGE_5ug_1_-.bedgraph"))
-export.bedGraph(exp@counts$TSSs$cpm$RAMPAGE_5ug_2[strand(exp@counts$TSSs$cpm$RAMPAGE_5ug_2) == "+"], 
-                file.path(baseDir, "human_work/bedgraphs/RAMPAGE_5ug_2_+.bedgraph"))
-export.bedGraph(exp@counts$TSSs$cpm$RAMPAGE_5ug_2[strand(exp@counts$TSSs$cpm$RAMPAGE_5ug_2) == "-"], 
-                file.path(baseDir, "human_work/bedgraphs/RAMPAGE_5ug_2_-.bedgraph"))
+	export(pos, file.path(bedgraph_dir, paste(sample, "pos.bedgraph", sep = "_")), format = "bedgraph")
+	export(min, file.path(bedgraph_dir, paste(sample, "min.bedgraph", sep = "_")), format = "bedgraph")
+})
+
+#######################
+## CAGE TSR Analysis ##
+#######################
 
 # Normalize TSR counts
 exp <- count_normalization(exp, data_type = "tsr", threshold = 3, n_samples = 1, samples = all)
