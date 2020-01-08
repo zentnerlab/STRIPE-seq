@@ -13,7 +13,7 @@ if (!dir.exists("human_work")){
   message("Creating directory 'human_work'...")
   dir.create("human_work")
 } else {
-  message("Directory 'human_work' already exists...")
+  message("Directory 'human_work' already exists.")
 }
 
 ####################
@@ -82,37 +82,37 @@ if (!dir.exists(stripe_dir)){
   print("Creating directory 'human_work/STRIPE'")
   dir.create(stripe_dir)
 } else {
-  print("Directory 'human_work/STRIPE' already exists")
+  print("Directory 'human_work/STRIPE' already exists.")
 }
 
 # Normalize TSS counts
 exp <- count_normalization(exp, data_type = "tss", threshold = 3, n_samples = 1, samples = stripe)
 
 # Generate a combinbed TSS correlation plot
-p <- plot_correlation(exp, data_type = "tss", font_size = 4, pt_size = 0.5) +
-    ggplot2::theme_bw() +
-    ggplot2::theme(text = element_text(size = 6))
-
-ggsave(file.path(stripe_dir, "tss_correlation.png"), plot = p, device = "png", type = "cairo", height = 4, width = 4)
+# p <- plot_correlation(exp, data_type = "tss", font_size = 4, pt_size = 0.5) +
+#     ggplot2::theme_bw() +
+#     ggplot2::theme(text = element_text(size = 6))
+# 
+# ggsave(file.path(stripe_dir, "tss_correlation.png"), plot = p, device = "png", type = "cairo", height = 4, width = 4)
 
 # Generate a hierarchically clustered TSS heatmap with correlation values displayed
-corr_matrix <- find_correlation(exp, data_type = "tss", correlation_metric = "pearson")
+corr_matrix <- find_correlation(exp, data_type = "tss", correlation_metric = "pearson", samples = stripe)
 
-cairo_pdf(file = file.path(stripe_dir, "tss_correlation_hierarchical.pdf"), width = 4, height = 4)
+cairo_pdf(file = file.path(stripe_dir, "tss_correlation_hierarchical.pdf"), width = 5, height = 5)
 Heatmap(corr_matrix, col = viridis(256), heatmap_legend_param = list(title = "PCC"), 
         layer_fun = function(j, i, x, y, width, height, fill)
         {
-            grid.text(sprintf("%.3f", pindex(corr_matrix, i, j)), x, y, gp = gpar(fontsize = 12, col = "white"))
+            grid.text(sprintf("%.3f", pindex(corr_matrix, i, j)), x, y, gp = gpar(fontsize = 22, col = "white"))
         }
 )
 dev.off()
 
 # Annotate TSSs relative to genomic features
-exp <- annotate_features(exp, annotation_file = "Homo_sapiens.GRCh38.98.chr.gtf",
+exp <- annotate_features(exp, annotation_file = "human_data/Homo_sapiens.GRCh38.98.chr.gtf",
                          data_type = "tss", feature_type = "transcript", upstream = 500, downstream = 500)
 
 # Explore TSS read thresholds for promoter fraction and plot
-thresh <- explore_thresholds(exp, annotation_file = "Homo_sapiens.GRCh38.98.chr.gtf", 
+thresh <- explore_thresholds(exp, annotation_file = "human_data/Homo_sapiens.GRCh38.98.chr.gtf", 
                              feature_type = "transcript", max_threshold = 25, 
                              upstream = 500, downstream = 500, samples = stripe)
 
@@ -138,14 +138,14 @@ p <- plot_genomic_distribution(genomic_dist) +
 
 ggsave(file.path(stripe_dir, "tss_genomic_distribution_quantiles.pdf"), plot = p, device = cairo_pdf, height = 4, width = 6)
 
-# Plot number of promoter-proximal features with a TSS
-features <- detect_features(exp, data_type = "tss", feature_type = "transcript", threshold = 3, 
-                            samples = stripe)
-
-p <- plot_detected_features(features, ncol = 3, width = 0.75) +
-    ggplot2::theme(text = element_text(size = 14), legend.key.size = unit(0.8, "cm"))
-
-ggsave(file.path(stripe_dir, "tss_feature_plot.pdf"), plot = p, device = cairo_pdf, height = 1.5, width = 8)
+# # Plot number of promoter-proximal features with a TSS
+# features <- detect_features(exp, data_type = "tss", feature_type = "transcript", threshold = 3, 
+#                             samples = stripe)
+# 
+# p <- plot_detected_features(features, ncol = 3, width = 0.75) +
+#     ggplot2::theme(text = element_text(size = 14), legend.key.size = unit(0.8, "cm"))
+# 
+# ggsave(file.path(stripe_dir, "tss_feature_plot.pdf"), plot = p, device = cairo_pdf, height = 1.5, width = 8)
 
 # Generate TSS density plots
 p <- plot_average(exp, data_type = "tss", threshold = 3, samples = "K562_100ng_1", upstream = 1000, downstream = 1000) +
@@ -154,37 +154,45 @@ p <- plot_average(exp, data_type = "tss", threshold = 3, samples = "K562_100ng_1
 ggsave(file.path(stripe_dir, "tss_average_plot.pdf"), plot = p, cairo_pdf, height = 2.5, width = 3.5)
 
 # Generate TSS sequence logos
-seqs <- tss_sequences(exp, genome_assembly = "Homo_sapiens.GRCh38.dna_sm.primary_assembly.fa",
+seqs <- tss_sequences(exp, genome_assembly = "human_data/Homo_sapiens.GRCh38.dna_sm.primary_assembly.fa",
                       threshold = 3, samples = stripe)
 
 p <- plot_sequence_logo(seqs, ncol = 1, font_size = 10)
 
-ggsave(file.path(stripe_dir, "tss_seq_logo.pdf"), plot = p, device = cairo_pdf, height = 3, width = 4)
+ggsave(file.path(stripe_dir, "tss_seq_logo.pdf"), plot = p, device = cairo_pdf, height = 5, width = 4)
 
-seqs <- tss_sequences(exp, genome_assembly = "Homo_sapiens.GRCh38.dna_sm.primary_assembly.fa",
+seqs <- tss_sequences(exp, genome_assembly = "human_data/Homo_sapiens.GRCh38.dna_sm.primary_assembly.fa",
                       threshold = 3, quantiles = 5, samples = "K562_100ng_1")
 
-p <- plot_sequence_logo(seqs, ncol = 1, font_size = 10) +
+p <- plot_sequence_logo(seqs, ncol = 1, font_size = 10)
 
 ggsave(file.path(stripe_dir, "tss_seq_logo_quantiles.pdf"), plot = p, device = cairo_pdf, height = 6, width = 4)
 
 # Generate TSS color plot
-seqs <- tss_sequences(exp, genome_assembly = file.path(baseDir, "Homo_sapiens.GRCh38.dna.primary_assembly.fa"),
+seqs <- tss_sequences(exp, genome_assembly = "human_data/Homo_sapiens.GRCh38.dna_sm.primary_assembly.fa",
                       threshold = 3, samples = "K562_100ng_1")
 
 p <- plot_sequence_colormap(seqs, ncol = 3) +
     ggplot2::theme(text = element_text(size = 6), legend.key.size = unit(0.4, "cm"))
 
-ggsave("tss_seq_colormap.png", plot = p, device = "png", type = "cairo", height = 2.5, width = 2)
+ggsave(file.path(stripe_dir, "tss_seq_colormap.png"), plot = p, device = "png", type = "cairo", height = 2.5, width = 2)
 
 # Assess TSS dinucleotide frequencies
-frequencies <- dinucleotide_frequencies(exp, genome_assembly = "Homo_sapiens.GRCh38.dna_sm.primary_assembly.fa",
+frequencies <- dinucleotide_frequencies(exp, genome_assembly = "human_data/Homo_sapiens.GRCh38.dna_sm.primary_assembly.fa",
                                         threshold = 3, samples = stripe)
 
-p <- plot_dinucleotide_frequencies(frequencies, ncol = 3, sample_order = stripe) +
+p <- plot_dinucleotide_frequencies(frequencies, ncol = 1, sample_order = stripe) +
     ggplot2::theme(text = element_text(size = 12), legend.key.size = unit(0.6, "cm"))
 
-ggsave(file.path(stripe_dir, "tss_dinucleotide_frequencies.pdf"), plot = p, device = cairo_pdf, height = 2.75, width = 7)
+ggsave(file.path(stripe_dir, "tss_dinucleotide_frequencies.pdf"), plot = p, device = cairo_pdf, height = 7, width = 3.5)
+
+frequencies <- dinucleotide_frequencies(exp, genome_assembly = "human_data/Homo_sapiens.GRCh38.dna_sm.primary_assembly.fa",
+                                        threshold = 3, samples = "K562_100ng_1")
+
+p <- plot_dinucleotide_frequencies(frequencies, ncol = 1) +
+    ggplot2::theme(text = element_text(size = 12), legend.key.size = unit(0.6, "cm"))
+
+ggsave(file.path(stripe_dir, "tss_dinucleotide_frequencies_rep1.pdf"), plot = p, device = cairo_pdf, height = 3, width = 3.8)
 
 # Plot distance of dominant TSS to annotated start codon
 dominant <- dominant_tss(exp, threshold = 3, feature_type = "geneId", samples = "K562_100ng_1")
@@ -210,45 +218,41 @@ if (!dir.exists(bedgraph_dir)){
   message("Creating directory 'human_work/bedgraphs'...")
   dir.create(bedgraph_dir)
 } else {
-  message("Directory 'human_work/bedgraphs' already exists...")
+  message("Directory 'human_work/bedgraphs' already exists.")
 }
 
 iwalk(exp@counts$TSSs$cpm, function(counts, sample) {
-	pos <- counts[strand(counts) == "+"]
-	min <- counts[strand(counts) == "-"]
+	plus <- counts[strand(counts) == "+"]
+	minus <- counts[strand(counts) == "-"]
 
-	export(pos, file.path(bedgraph_dir, paste(sample, "pos.bedgraph", sep = "_")), format = "bedgraph")
-	export(min, file.path(bedgraph_dir, paste(sample, "min.bedgraph", sep = "_")), format = "bedgraph")
+	export(plus, file.path(bedgraph_dir, paste(sample, "plus.bedgraph", sep = "_")), format = "bedgraph")
+	export(minus, file.path(bedgraph_dir, paste(sample, "minus.bedgraph", sep = "_")), format = "bedgraph")
 })
-
-##################
-## TSR Analysis ##
-##################
 
 # Normalize TSR counts
 exp <- count_normalization(exp, data_type = "tsr", threshold = 3, n_samples = 1, samples = stripe)
 
 # Generate a combinbed TSR correlation plot
-p <- plot_correlation(exp, data_type = "tsr", font_size = 3, pt_size = 0.5) +
-    ggplot2::theme_bw() +
-    ggplot2::theme(text = element_text(size = 6))
+# p <- plot_correlation(exp, data_type = "tsr", font_size = 3, pt_size = 0.5) +
+#     ggplot2::theme_bw() +
+#     ggplot2::theme(text = element_text(size = 6))
+# 
+# ggsave(file.path(stripe_dir, "tsr_correlation.png"), plot = p, device = "png", type = "cairo", height = 3, width = 3)
 
-ggsave(file.path(stripe_dir, "tsr_correlation.png"), plot = p, device = "png", type = "cairo", height = 3, width = 3)
-
-# Generate a hierarchically clustered TSR heatmap with correlation values displayed
-corr_matrix <- find_correlation(exp, data_type = "tsr", correlation_metric = "pearson")
-
-cairo_pdf(file = file.path(stripe_dir, "tsr_correlation_hierarchical.pdf"), width = 4, height = 4)
-Heatmap(corr_matrix, col = viridis(256), heatmap_legend_param = list(title = "PCC"), 
-        layer_fun = function(j, i, x, y, width, height, fill)
-        {
-            grid.text(sprintf("%.3f", pindex(corr_matrix, i, j)), x, y, gp = gpar(fontsize = 12, col = "white"))
-        }
-)
-dev.off()
+# Generate a hierarchically clustered TSR heatmap
+# corr_matrix <- find_correlation(exp, data_type = "tsr", correlation_metric = "pearson")
+# 
+# cairo_pdf(file = file.path(stripe_dir, "tsr_correlation_hierarchical.pdf"), width = 4, height = 4)
+# Heatmap(corr_matrix, col = viridis(256), heatmap_legend_param = list(title = "PCC"), 
+#         layer_fun = function(j, i, x, y, width, height, fill)
+#         {
+#             grid.text(sprintf("%.3f", pindex(corr_matrix, i, j)), x, y, gp = gpar(fontsize = 12, col = "white"))
+#         }
+# )
+# dev.off()
 
 # Annotate TSRs
-exp <- annotate_features(exp, annotation_file = "Homo_sapiens.GRCh38.98.chr.gtf",
+exp <- annotate_features(exp, annotation_file = "human_data/Homo_sapiens.GRCh38.98.chr.gtf",
                          data_type = "tsr", feature_type = "transcript", upstream = 500, downstream = 500)
 
 # Determine TSR distribution relative to genomic features
@@ -276,17 +280,22 @@ p <- plot_detected_features(features, width = 0.75) +
 ggsave(file.path(stripe_dir, "tsr_feature_plot.pdf"), plot = p, device = cairo_pdf, height = 1.5, width = 5)
 
 # Plot selected TSR metrics
-p <- plot_tsr_metric(exp, tsr_metrics = "nTSSs", log2_transform = TRUE, ncol = 1, plot_type = "boxjitter",
-                     size = 0.5, samples = "K562_100ng_1") +
-    ggplot2::theme(text = element_text(size = 14), legend.key.size = unit(0.8, "cm"))
-
-ggsave(file.path(stripe_dir, "tsr_metrics.pdf"), plot = p, device = cairo_pdf, width = 3.5, height = 4)
+# p <- plot_tsr_metric(exp, tsr_metrics = "nTSSs", log2_transform = TRUE, ncol = 1, plot_type = "boxjitter",
+#                      size = 0.5, samples = "K562_100ng_1") +
+#     ggplot2::theme(text = element_text(size = 14), legend.key.size = unit(0.8, "cm"))
+# 
+# ggsave(file.path(stripe_dir, "tsr_metrics.pdf"), plot = p, device = cairo_pdf, width = 3.5, height = 4)
 
 # Generate TSR average plot
 p <- plot_average(exp, data_type = "tsr", samples = "K562_100ng_1", upstream = 1000, downstream = 1000) +
     ggplot2::theme(text = element_text(size = 12))
 
 ggsave(file.path(stripe_dir, "tsr_average_plot.pdf"), plot = p, device = cairo_pdf, height = 3, width = 3)
+
+# Export TSR beds
+iwalk(exp@counts$TSRs$cpm, function(counts, sample) {
+    export(counts, file.path(bedgraph_dir, paste(sample, "TSRs.bed", sep = "_")), format = "bed")
+})
 
 ####################################
 ### STRIPE-seq vs. CAGE analysis ###
@@ -298,18 +307,18 @@ if (!dir.exists(cage_dir)){
   message("Creating directory 'human_work/CAGE'...")
   dir.create(cage_dir)
 } else {
-  message("Directory 'human_work/CAGE'...")
+  message("Directory 'human_work/CAGE' already exists.")
 }
 
 # Normalize TSS counts
 exp <- count_normalization(exp, data_type = "tss", threshold = 3, n_samples = 1, samples = all)
 
 # Annotate TSSs
-exp <- annotate_features(exp, annotation_file = "Homo_sapiens.GRCh38.98.chr.gtf",
+exp <- annotate_features(exp, annotation_file = "human_data/Homo_sapiens.GRCh38.98.chr.gtf",
                          data_type = "tss", feature_type = "transcript", upstream = 500, downstream = 500)
 
 # Explore TSS read thresholds for promoter fraction and plot
-thresh <- explore_thresholds(exp, annotation_file = "Homo_sapiens.GRCh38.98.chr.gtf", 
+thresh <- explore_thresholds(exp, annotation_file = "human_data/Homo_sapiens.GRCh38.98.chr.gtf", 
                              feature_type = "transcript", max_threshold = 25, 
                              upstream = 500, downstream = 500, samples = all)
 
@@ -338,62 +347,50 @@ p <- plot_detected_features(features, ncol = 2, width = 0.75) +
 ggsave(file.path(cage_dir, "tss_feature_plot.pdf"), plot = p, device = cairo_pdf, height = 4.5, width = 8)
 
 # Assess TSS dinucleotide frequencies
-frequencies <- dinucleotide_frequencies(exp, genome_assembly = "Homo_sapiens.GRCh38.dna_sm.primary_assembly.fa",
+frequencies <- dinucleotide_frequencies(exp, genome_assembly = "human_data/Homo_sapiens.GRCh38.dna_sm.primary_assembly.fa",
                                         threshold = 3, samples = all)
 
-p <- plot_dinucleotide_frequencies(frequencies, ncol = 2, sample_order = all) +
+p <- plot_dinucleotide_frequencies(frequencies, ncol = 3, sample_order = all) +
     ggplot2::theme(text = element_text(size = 12), legend.key.size = unit(0.8, "cm"))
 
-ggsave(file.path(cage_dir, "tss_dinucleotide_frequencies.pdf"), plot = p, device = cairo_pdf, height = 8.5, width = 5.5)
+ggsave(file.path(cage_dir, "tss_dinucleotide_frequencies.pdf"), plot = p, device = cairo_pdf, height = 8, width = 7)
 
 # Export normalized TSS bedGraphs
 
 bedgraph_dir <- file.path("human_work", "bedgraphs")
 
 iwalk(exp@counts$TSSs$cpm, function(counts, sample) {
-	pos <- counts[strand(counts) == "+"]
-	min <- counts[strand(counts) == "-"]
+	plus <- counts[strand(counts) == "+"]
+	minus <- counts[strand(counts) == "-"]
 
 	export(pos, file.path(bedgraph_dir, paste(sample, "pos.bedgraph", sep = "_")), format = "bedgraph")
 	export(min, file.path(bedgraph_dir, paste(sample, "min.bedgraph", sep = "_")), format = "bedgraph")
 })
 
-#######################
-## CAGE TSR Analysis ##
-#######################
-
 # Normalize TSR counts
 exp <- count_normalization(exp, data_type = "tsr", threshold = 3, n_samples = 1, samples = all)
 
-# Generate a combinbed TSR correlation plot
-p <- plot_correlation(exp, data_type = "tsr", correlation_metric = "spearman", font_size = 2, pt_size = 0.5) +
-    ggplot2::theme_bw() +
-    ggplot2::theme(text = element_text(size = 6))
+# # Generate a combinbed TSR correlation plot
+# p <- plot_correlation(exp, data_type = "tsr", correlation_metric = "spearman", font_size = 2, pt_size = 0.5) +
+#     ggplot2::theme_bw() +
+#     ggplot2::theme(text = element_text(size = 6))
 
 ggsave(file.path(cage_dir, "tsr_correlation.png"), plot = p, device = "png", type = "cairo", height = 6, width = 6)
 
 # Generate a hierarchically clustered TSR heatmap with correlation values displayed
-corr_matrix <- find_correlation(exp, data_type = "tsr", correlation_metric = "spearman")
-
-cairo_pdf(file = file.path(cage_dir, "tsr_correlation_hierarchical.pdf"), width = 12, height = 12)
-Heatmap(corr_matrix, col = viridis(256), heatmap_legend_param = list(title = "Spearman"), 
-        layer_fun = function(j, i, x, y, width, height, fill)
-        {
-            grid.text(sprintf("%.3f", pindex(corr_matrix, i, j)), x, y, gp = gpar(fontsize = 22, col = "white"))
-        }
-)
-dev.off()
-
-# # Generate a hierarchically clustered TSS heatmap (no values on plot)
-# p <- plot_correlation(exp, data_type = "tsr", correlation_plot = "hierarchical", col = viridis(256), 
-#                       correlation_metric = "spearman")
+# corr_matrix <- find_correlation(exp, data_type = "tsr", correlation_metric = "spearman")
 # 
-# cairo_pdf("tsr_correlation_hierarchical.pdf", height = 7, width = 7)
-# p
+# cairo_pdf(file = file.path(cage_dir, "tsr_correlation_hierarchical.pdf"), width = 12, height = 12)
+# Heatmap(corr_matrix, col = viridis(256), heatmap_legend_param = list(title = "Spearman"), 
+#         layer_fun = function(j, i, x, y, width, height, fill)
+#         {
+#             grid.text(sprintf("%.3f", pindex(corr_matrix, i, j)), x, y, gp = gpar(fontsize = 22, col = "white"))
+#         }
+# )
 # dev.off()
 
 # Annotate TSRs
-exp <- annotate_features(exp, annotation_file = "Homo_sapiens.GRCh38.98.chr.gtf",
+exp <- annotate_features(exp, annotation_file = "human_data/Homo_sapiens.GRCh38.98.chr.gtf",
                          data_type = "tsr", feature_type = "transcript", upstream = 500, downstream = 500)
 
 # Determine TSR distribution relative to genomic features
@@ -414,6 +411,25 @@ p <- plot_detected_features(features, ncol = 2, width = 0.75) +
 
 ggsave(file.path(cage_dir, "tsr_feature_plot.pdf"), plot = p, device = cairo_pdf, height = 4.5, width = 6.5)
 
+# Determine average promoter feature counts and plot
+p <- features %>% 
+    add_column(technology = c(rep("CAGE", 2), rep("STRIPE", 3), "nanoCAGEXL", rep("RAMPAGE", 2))) %>%
+    mutate(technology = factor(technology, levels=c("STRIPE", "CAGE", "RAMPAGE", "nanoCAGEXL"))) %>%
+    ggplot(aes(x = technology, y = promoter_proximal_features)) +
+    theme_bw() +
+    stat_summary(fun.data = "mean_sdl", fun.args = list(mult = 1), size = 0.4, geom = "errorbar", width = 0.25,
+                 alpha = 0.5) +
+    geom_jitter(aes(color = technology), position = position_jitter(height = 0, width = 0.2), size = 2) +
+    scale_color_viridis_d(begin = 0, end = 0.7) +
+    ylim(5000, 15000)
+
+ggsave(file.path(cage_dir, "promoter_feature_jitter_plot.pdf"), plot = p, device = cairo_pdf, height = 4, width = 6)
+
+# Export TSR beds
+iwalk(exp@counts$TSRs$cpm, function(counts, sample) {
+    export(counts, file.path(bedgraph_dir, paste(sample, "TSRs.bed", sep = "_")), format = "bed")
+})
+
 ########################
 ### RNA-seq analysis ###
 ########################
@@ -424,7 +440,7 @@ if (!dir.exists(rnaseq_dir)){
     message("Creating directory 'human_work/RNA_seq'...")
     dir.create(rnaseq_dir)
 } else {
-    message("Directory 'human_work/RNA_seq' already exisits...")
+    message("Directory 'human_work/RNA_seq' already exists.")
 }
 
 # Get feature counts for STRIPE-seq and RNA-seq
