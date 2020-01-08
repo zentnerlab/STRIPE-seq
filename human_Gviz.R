@@ -3,7 +3,8 @@ library(Gviz)
 library(viridis)
 library(scales)
 
-# This script imports signal tracks and displays them at the specified regions of the human genome, listed at the end of the script.
+# This script imports signal tracks and displays them at the specified regions of the human 
+# genome, listed at the end of the script.
 
 gviz_dir <- file.path("human_work", "Gviz")
 bedgraph_dir <- file.path("human_work", "bedgraphs")

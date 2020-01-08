@@ -1,3 +1,4 @@
+library(tsrexplorer)
 library(tidyverse)
 library(GenomicFeatures)
 library(AnnotationDbi)
@@ -6,9 +7,10 @@ library(ComplexHeatmap)
 library(viridis)
 library(ComplexHeatmap)
 
-# This script generates a list of human mRNA TSSs by filtering a TxDb object, then gets their promoter coordinates and sums TSSs 
-# in each promoter for each sample. It then normalizes promoter counts and performs Spearman correlation analysis to assess concordance 
-# of promoter signals between methods.
+# This script generates a list of human mRNA TSSs by filtering a TxDb object, then gets their 
+# promoter coordinates and sums TSSs in each promoter for each sample. It then normalizes 
+# promoter counts and performs Spearman correlation analysis to assess concordance of promoter 
+# signals between methods.
 
 prom_corr_dir <- file.path("human_work", "promoter_correlation")
 
