@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Script to generate spike-in-normalized human CUT&Tag bigwig files to assess histone modification at distal TSRs in K562 STRIPE-seq data. Two replicate datasets for each antibody are merged and indexed with SAMTools. The spike-in factors determined by merge_ecoli.sh are then used in the generation of normalized bigwig files with deepTools bamCoverage.
+
 # Merge replicate GRCh38 alignment BAM files
 
 cd /N/dc2/scratch/gzentner/K562_histone/human_results/aligned

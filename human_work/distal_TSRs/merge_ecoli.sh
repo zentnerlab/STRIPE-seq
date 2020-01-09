@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# Script to determine the spike-in normalization for CUT&Tag datasets used to assess 
+# histone modification enrichment at distal TSRs in K562 STRIPE-seq data. Two replicate
+# datasets for each antibody are merged and the number of reads mapping to the E. coli
+# genome is counted for each. The spike-in factor is then calculated as 1000 / the
+# number of reads mapped to the E. coli genome and output to the command line.
+
 # Merge replicate EB1 E. coli alignment BAM files 
 
 cd /N/dc2/scratch/gzentner/K562_histone/ecoli_results/aligned
