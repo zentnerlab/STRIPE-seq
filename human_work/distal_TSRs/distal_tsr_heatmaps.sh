@@ -30,8 +30,7 @@ plotHeatmap \
 -o distal_tsr_tss_signal_matrix.pdf \
 --colorMap Greys \
 --missingDataColor '#ffffff' \
---sortUsingSamples 1 \
---sortRegions ascend \
+--sortUsingSamples 2 \
 --heatmapHeight 8 \
 --zMin 0 \
 --zMax 0.1 \
@@ -68,4 +67,4 @@ plotHeatmap \
 --colorMap viridis \
 --zMax 20 20 20 0.5 0.5 \
 --whatToShow 'heatmap and colorbar' \
---outFileSortedRegions distal_tsr_histone_clusters.txt
+--outFileSortedRegions distal_tsr_cutntag_H3K4me1_sorted.txt
