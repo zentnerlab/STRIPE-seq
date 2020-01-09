@@ -11,3 +11,7 @@ Clone the ChIPseq automation repository. Navigate to a directory you would like 
 ## TSS/TSR analysis
 
 ### yeast_TSRexploreR.R
+If run completely, this script will:
+
+1. Load TSSs and TSRs called by GoSTRIPES and generate lists of samples used for the ensuing analyses
+2. 
