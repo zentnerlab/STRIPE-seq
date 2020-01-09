@@ -10,15 +10,39 @@
 
 cd /N/dc2/scratch/gzentner/K562_histone/ecoli_results/aligned
 
-samtools merge -f -@ 8 H3K27ac_merged.bam SRR8383507_Millipore_cat_MABE647_1.bam SRR8383508_Millipore_cat_MABE647_2.bam 
+samtools merge \
+-f \
+-@ 8 \
+H3K27ac_merged.bam \
+SRR8383507_Millipore_cat_MABE647_1.bam \
+SRR8383508_Millipore_cat_MABE647_2.bam 
 
-samtools merge -f -@ 8 H3K4me1_merged.bam SRR8383512_H3K4me1_Abcam_cat_ab8895_1.bam SRR8383513_H3K4me1_Abcam_cat_ab8895_2.bam
+samtools merge \
+-f \
+-@ 8 \
+H3K4me1_merged.bam \
+SRR8383512_H3K4me1_Abcam_cat_ab8895_1.bam \
+SRR8383513_H3K4me1_Abcam_cat_ab8895_2.bam
 
-samtools merge -f -@ 8 H3K4me2_merged.bam SRR8383514_H3K4me2_Upstate_cat_07_030_1.bam SRR8383515_H3K4me2_Upstate_cat_07_030_2.bam
+samtools merge \
+-f \
+-@ 8 \
+H3K4me2_merged.bam \
+SRR8383514_H3K4me2_Upstate_cat_07_030_1.bam \
+SRR8383515_H3K4me2_Upstate_cat_07_030_2.bam
 
-samtools merge -f -@ 8 H3K4me3_merged.bam SRR8383516_H3K4me3_Active_Motif_cat_39159_1.bam SRR8383517_H3K4me3_Active_Motif_cat_39159_2.bam
+samtools merge \
+-f \
+-@ 8 \
+H3K4me3_merged.bam \
+SRR8383516_H3K4me3_Active_Motif_cat_39159_1.bam \ SRR8383517_H3K4me3_Active_Motif_cat_39159_2.bam
 
-samtools merge -f -@ 8 IgG_merged.bam SRR8435051.bam SRR8435052.bam
+samtools merge \
+-f \
+-@ 8 \
+IgG_merged.bam \
+SRR8435051.bam \
+SRR8435052.bam
 
 # Count reads mapped to E. coli genome in each sample and calculate spike-in normalization factors
 
