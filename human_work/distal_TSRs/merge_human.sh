@@ -31,7 +31,8 @@ samtools merge \
 -f \
 -@ 8 \
 H3K4me3_merged.bam \
-SRR8383516_H3K4me3_Active_Motif_cat_39159_1.bam \ SRR8383517_H3K4me3_Active_Motif_cat_39159_2.bam
+SRR8383516_H3K4me3_Active_Motif_cat_39159_1.bam \
+SRR8383517_H3K4me3_Active_Motif_cat_39159_2.bam
 
 samtools merge \
 -f \
