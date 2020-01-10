@@ -463,15 +463,6 @@ p <- plot_genomic_distribution(tss_distribution, sample_order = diamide) +
 
 ggsave(file.path(diamide_dir, "tss_genomic_distribution.pdf"), plot = p, device = cairo_pdf, height = 4.5, width = 6)
 
-# Plot number of promoter-proximal features with a TSS
-features <- detect_features(exp, data_type = "tss", feature_type = "transcript", threshold = 3, 
-                            samples = c("S288C_100ng_1","S288C_diamide_100ng_1"))
-
-p <- plot_detected_features(features, ncol = 3, width = 0.75) +
-    ggplot2::theme(text = element_text(size = 12), legend.key.size = unit(0.8, "cm"), axis.text = element_text(color="black"))
-
-ggsave(file.path(diamide_dir, "tss_feature_plot.pdf"), plot = p, device = cairo_pdf, height = 1.5, width = 6.5)
-
 # Generate TSS sequence logos
 seqs <- tss_sequences(exp, genome_assembly = assembly, threshold = 3, 
                       samples = c("S288C_100ng_1","S288C_diamide_100ng_1"))
