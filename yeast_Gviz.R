@@ -9,7 +9,8 @@ library(scales)
 
 gviz_dir <- file.path("yeast_work", "Gviz")
 bedgraph_dir <- file.path("yeast_work", "bedgraphs")
-rnaseq_dir <- file.path("yeast_work", "RNA_seq")
+rnaseq_dir <- file.path("yeast_data", "RNA_seq")
+riboseq_dir <- file.path("yeast_data", "Ribo_seq")
 
 if (!dir.exists(gviz_dir)) {
     message("Creating directory 'yeast_work/Gviz'...")
@@ -108,16 +109,16 @@ diamide_rnaseq_1_neg <- DataTrack(range = file.path(rnaseq_dir, "RNASEQ009_S288C
                               name = "YPD RNA-seq 1 minus", col.histogram = "#22A884FF", fill.histogram = "#22A884FF", ylim = rnaseq_neg_lim)
 
 # Ribosome profiling
-S288C_riboseq_1_pos <- DataTrack(range = file.path("yeast_data", "GSM1949550_rep1_positive.wig"), genome = "sacCer3",
+S288C_riboseq_1_pos <- DataTrack(range = file.path(riboseq_dir, "GSM1949550_rep1_positive.wig"), genome = "sacCer3",
                                  name = "S288C Ribo-seq 1 plus", col.histogram = "#3CBC75FF", fill.histogram = "#3CBC75FF", 
                                  ylim = riboseq_pos_lim)
-S288C_riboseq_1_neg <- DataTrack(range = file.path("yeast_data", "GSM1949550_rep1_negative.wig"), genome = "sacCer3", 
+S288C_riboseq_1_neg <- DataTrack(range = file.path(riboseq_dir, "GSM1949550_rep1_negative.wig"), genome = "sacCer3", 
                                  name = "S288C Ribo-seq 1 minus", col.histogram = "#3CBC75FF", fill.histogram = "#3CBC75FF", 
                                  ylim = riboseq_neg_lim)
-S288C_riboseq_2_pos <- DataTrack(range = file.path("yeast_data", "GSM1949551_rep2_positive.wig"), genome = "sacCer3",
+S288C_riboseq_2_pos <- DataTrack(range = file.path(riboseq_dir, "GSM1949551_rep2_positive.wig"), genome = "sacCer3",
                                  name = "S288C Ribo-seq 2 plus", col.histogram = "#3CBC75FF", fill.histogram = "#3CBC75FF", 
                                  ylim = riboseq_pos_lim)
-S288C_riboseq_2_neg <- DataTrack(range = file.path("yeast_data", "GSM1949551_rep2_negative.wig"), genome = "sacCer3", 
+S288C_riboseq_2_neg <- DataTrack(range = file.path(riboseq_dir, "GSM1949551_rep2_negative.wig"), genome = "sacCer3", 
                                  name = "S288C Ribo-seq 2 minus", col.histogram = "#3CBC75FF", fill.histogram = "#3CBC75FF", 
                                  ylim = riboseq_neg_lim)
 
