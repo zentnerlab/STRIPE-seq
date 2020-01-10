@@ -253,8 +253,8 @@ iwalk(exp@counts$TSSs$cpm, function(counts, sample) {
 	plus <- counts[strand(counts) == "+"]
 	minus <- counts[strand(counts) == "-"]
 
-	export(pos, file.path(bedgraph_dir, paste(sample, "pos.bedgraph", sep = "_")), format = "bedgraph")
-	export(min, file.path(bedgraph_dir, paste(sample, "min.bedgraph", sep = "_")), format = "bedgraph")
+	export(plus, file.path(bedgraph_dir, paste(sample, "plus.bedgraph", sep = "_")), format = "bedgraph")
+	export(minus, file.path(bedgraph_dir, paste(sample, "minus.bedgraph", sep = "_")), format = "bedgraph")
 })
 
 # Normalize TSR counts
