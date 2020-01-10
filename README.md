@@ -21,4 +21,4 @@ Clone the ChIPseq automation repository. Navigate to a directory you would like 
 5. distal_TSR_heatmaps.sh generates heatmaps of TSS and histone modification CUT&Tag signal around distal TSRs.
 
 ## A note regarding annotation files
-For human analyses, the user must provide a genome sequence file in FASTA format and a genome annotation file in GTF/GFF format, as these are too large to be hosted on GitHub (we used Ensembl GRCh38.p13 for the analyses in the paper). The yeast genome sequence and annotation files (Ensembl V64.1.1) are built into TSRexploreR.
+For human analyses, the user must place a genome sequence file in FASTA format and a genome annotation file in GTF/GFF format in the human_data subfolder, as these are too large to be hosted on GitHub (we used Ensembl GRCh38.p13 for the analyses in the paper). The yeast genome sequence and annotation files (Ensembl V64.1.1) are built into TSRexploreR.
