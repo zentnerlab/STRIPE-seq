@@ -9,7 +9,7 @@ library(scales)
 gviz_dir <- file.path("human_work", "Gviz")
 bedgraph_dir <- file.path("human_work", "bedgraphs")
 rnaseq_dir <- file.path("human_data", "RNA_seq")
-distal_tsr_dir <- file.path("human_work", "distal_TSRs")
+cutntag_dir <- file.path("human_data", "CUTnTag")
 
 if (!dir.exists(gviz_dir)) {
     message("Creating directory 'human_work/Gviz'...")
@@ -92,19 +92,19 @@ K562_rnaseq_1_neg <- DataTrack(range = file.path(rnaseq_dir, "RNASEQ004_K562_unt
                                name = "K562 RNA-seq 1 minus", col.histogram = "#FDE725FF", fill.histogram = "#FDE725FF", ylim = rnaseq_neg_lim)
 
 # K562 histone marks 
-H3K27ac <- DataTrack(range = file.path(distal_tsr_dir, "cutntag_bigwigs", "H3K27ac_merged.spikenorm.bw"), genome = "GRCh38",
+H3K27ac <- DataTrack(range = file.path(cutntag_dir, "H3K27ac_merged.spikenorm.bw"), genome = "GRCh38",
                      name = "H3K27ac CUT&Tag", col.histogram = "#3CBC75FF", fill.histogram = "#3CBC75FF", ylim = h3k27cnt_lim)
 
-H3K4me1 <- DataTrack(range = file.path(distal_tsr_dir, "cutntag_bigwigs", "H3K4me1_merged.spikenorm.bw"), genome = "GRCh38",
+H3K4me1 <- DataTrack(range = file.path(cutntag_dir, "H3K4me1_merged.spikenorm.bw"), genome = "GRCh38",
                      name = "H3K4me1 CUT&Tag", col.histogram = "#39558CFF", fill.histogram = "#39558CFF", ylim = h3k4cnt_lim) 
 
-H3K4me2 <- DataTrack(range = file.path(distal_tsr_dir, "cutntag_bigwigs", "H3K4me2_merged.spikenorm.bw"), genome = "GRCh38",
+H3K4me2 <- DataTrack(range = file.path(cutntag_dir, "H3K4me2_merged.spikenorm.bw"), genome = "GRCh38",
                      name = "H3K4me2 CUT&Tag", col.histogram = "#287D8EFF", fill.histogram = "#287D8EFF", ylim = h3k4cnt_lim) 
 
-H3K4me3 <- DataTrack(range = file.path(distal_tsr_dir, "cutntag_bigwigs", "H3K4me3_merged.spikenorm.bw"), genome = "GRCh38",
+H3K4me3 <- DataTrack(range = file.path(cutntag_dir, "H3K4me3_merged.spikenorm.bw"), genome = "GRCh38",
                      name = "H3K4me3 CUT&Tag", col.histogram = "#1F968BFF", fill.histogram = "#1F968BFF", ylim = h3k4cnt_lim)
 
-IgG <- DataTrack(range = file.path(distal_tsr_dir, "cutntag_bigwigs", "IgG_merged.spikenorm.bw"), genome = "GRCh38",
+IgG <- DataTrack(range = file.path(cutntag_dir, "IgG_merged.spikenorm.bw"), genome = "GRCh38",
                      name = "IgG CUT&Tag", col.histogram = "#FDE725FF", fill.histogram = "#FDE725FF", ylim = h3k27cnt_lim) 
 
 # K562 enhancer annotations
