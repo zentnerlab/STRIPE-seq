@@ -240,22 +240,6 @@ p <- plot_dinucleotide_frequencies(frequencies, ncol = 1) +
 
 ggsave(file.path(ypd_stripe_dir, "tss_dinucleotide_frequencies_100ng.pdf"), plot = p, device = cairo_pdf, height = 7, width = 7)
 
-# Plot distance of dominant TSS to annotated start codon
-dominant <- dominant_tss(exp, threshold = 3, feature_type = "geneId", samples = "S288C_100ng_1")
-
-p <- plot_dominant_tss(dominant) +
-	theme(text = element_text(size = 12), axis.text = element_text(color="black"))
-
-ggsave(file.path(ypd_stripe_dir, "dominant_tss.pdf"), plot = p, device = cairo_pdf, height = 3, width = 3)
-
-# Plot hypothetical maximum 5'UTR length
-max <- max_utr(exp, threshold = 3, feature_type = "geneId", samples = "S288C_100ng_1")
-
-p <- plot_max_utr(max) +
-	theme(text = element_text(size = 12), axis.text = element_text(color="black"))
-
-ggsave(file.path(ypd_stripe_dir, "max_utr.pdf"), plot = p, device = cairo_pdf, height = 3, width = 3)
-
 # Export normalized TSS bedGraphs
 
 bedgraph_dir <- file.path("yeast_work", "bedgraphs")
@@ -277,39 +261,6 @@ iwalk(exp@counts$TSSs$cpm, function(counts, sample) {
 
 # Normalize TSR counts
 exp <- count_normalization(exp, data_type = "tsr", threshold = 3, n_samples = 1, samples = stripe)
-
-# Annotate TSRs
-exp <- annotate_features(exp, annotation_file = annotation, data_type = "tsr", feature_type = "transcript")
-
-# Determine TSR distribution relative to genomic features
-tsr_distribution <- genomic_distribution(exp, data_type = "tsr", threshold = 3, samples = "S288C_100ng_1")
-
-p <- plot_genomic_distribution(tsr_distribution) +
-    ggplot2::theme(text = element_text(size = 12), legend.key.size = unit(0.6, "cm"), axis.text = element_text(color="black"))
-
-ggsave(file.path(ypd_stripe_dir, "tsr_genomic_distribution.pdf"), plot = p, device = cairo_pdf, height = 2, width = 6)
-
-tsr_distribution <- genomic_distribution(exp, data_type = "tsr", threshold = 3, quantiles = 5, 
-                                         samples = stripe)
-
-p <- plot_genomic_distribution(tsr_distribution, sample_order = stripe) +
-    ggplot2::theme(text = element_text(size = 14), legend.key.size = unit(0.8, "cm"), axis.text = element_text(color="black"))
-
-ggsave(file.path(ypd_stripe_dir, "tsr_genomic_distribution_quantiles.pdf"), plot = p, device = cairo_pdf, height = 12, width = 6)
-
-# Plot number of promoter-proximal features with a TSR
-features <- detect_features(exp, data_type = "tsr", feature_type = "transcript", samples = stripe)
-
-p <- plot_detected_features(features, ncol = 3, width = 0.75) +
-    ggplot2::theme(text = element_text(size = 14), legend.key.size = unit(0.8, "cm"), axis.text = element_text(color="black"))
-
-ggsave(file.path(ypd_stripe_dir, "tsr_feature_plot.pdf"), plot = p, device = cairo_pdf, height = 4.5, width = 8)
-
-# Generate TSR density plot
-p <- plot_average(exp, data_type = "tsr", samples = "S288C_100ng_1", upstream = 1000, downstream = 1000) +
-    ggplot2::theme(text = element_text(size = 13), axis.text = element_text(color="black"))
-
-ggsave(file.path(ypd_stripe_dir, "tsr_density_plot.pdf"), plot = p, device = cairo_pdf, height = 2.5, width = 3.5)
 
 # Export TSR beds
 iwalk(exp@counts$TSRs$cpm, function(counts, sample) {
@@ -382,26 +333,14 @@ iwalk(exp@counts$TSSs$cpm, function(counts, sample) {
 # Normalize TSR counts
 exp <- count_normalization(exp, data_type = "tsr", threshold = 3, n_samples = 1, samples = all)
 
-# Annotate TSRs
-exp <- annotate_features(exp, annotation_file = annotation, data_type = "tsr", feature_type = "transcript")
-
-# Determine TSR distribution relative to genomic features
-tsr_distribution <- genomic_distribution(exp, data_type = "tsr", threshold = 3, samples = cage)
-
-p <- plot_genomic_distribution(tsr_distribution, sample_order = cage) +
-    ggplot2::theme(text = element_text(size = 12), legend.key.size = unit(0.6, "cm"), axis.text = element_text(color="black"))
-
-ggsave(file.path(cage_dir, "tsr_genomic_distribution.pdf"), plot = p, device = cairo_pdf, height = 6, width = 6)
-
-# Plot number of promoter-proximal features with a TSR (1 sample each method)
-features <- detect_features(exp, data_type = "tsr", feature_type = "transcript", samples = all)
-
 p <- plot_detected_features(features, ncol = 3, width = 0.75) +
     ggplot2::theme(text = element_text(size = 10), legend.key.size = unit(0.8, "cm"), axis.text = element_text(color="black"))
 
 ggsave(file.path(cage_dir, "tsr_feature_plot.pdf"), plot = p, device = cairo_pdf, height = 10, width = 10)
 
 # Determine average promoter feature counts and plot
+features <- detect_features(exp, data_type = "tsr", feature_type = "transcript", samples = all)
+
 p <- features %>% 
     add_column(technology = c(rep("nanoCAGE25", 2), rep("nanoCAGE500", 2), 
                               rep("STRIPE100", 3), rep("STRIPE250", 3), rep("STRIPE50", 3), 
@@ -451,42 +390,6 @@ Heatmap(corr_matrix, col = viridis(256), heatmap_legend_param = list(title = "PC
 )
 dev.off()
 
-# Annotate TSSs relative to genomic features
-exp <- annotate_features(exp, annotation_file = annotation, data_type = "tss", feature_type = "transcript", 
-                         upstream = 250, downstream = 100)
-
-# Determine TSS distribution relative to genomic features
-tss_distribution <- genomic_distribution(exp, data_type = "tss", threshold = 3, samples = diamide)
-
-p <- plot_genomic_distribution(tss_distribution, sample_order = diamide) +
-    ggplot2::theme(text = element_text(size = 14), legend.key.size = unit(0.8, "cm"), axis.text = element_text(color="black"))
-
-ggsave(file.path(diamide_dir, "tss_genomic_distribution.pdf"), plot = p, device = cairo_pdf, height = 4.5, width = 6)
-
-# Generate TSS sequence logos
-seqs <- tss_sequences(exp, genome_assembly = assembly, threshold = 3, 
-                      samples = c("S288C_100ng_1","S288C_diamide_100ng_1"))
-
-p <- plot_sequence_logo(seqs, ncol = 1, font_size = 10)
-
-ggsave(file.path(diamide_dir, "tss_seq_logo.pdf"), plot = p, device = cairo_pdf, height = 2.5, width = 4)
-
-# Plot distance of dominant TSS to annotated start codon
-dominant <- dominant_tss(exp, threshold = 3, feature_type = "geneId", samples = c("S288C_100ng_1","S288C_diamide_100ng_1"))
-
-p <- plot_dominant_tss(dominant) +
-	theme(text = element_text(size = 12), axis.text = element_text(color="black"))
-
-ggsave(file.path(diamide_dir, "dominant_tss.pdf"), plot = p, device = cairo_pdf, height = 3, width = 3)
-
-# Plot hypothetical maximum 5'UTR length
-max <- max_utr(exp, threshold = 3, feature_type = "geneId", samples = c("S288C_100ng_1","S288C_diamide_100ng_1"))
-
-p <- plot_max_utr(max) +
-	theme(text = element_text(size = 12), axis.text = element_text(color="black"))
-
-ggsave(file.path(diamide_dir, "max_utr.pdf"), plot = p, device = cairo_pdf, height = 3, width = 3)
-
 # Export normalized TSS bedGraphs
 iwalk(exp@counts$TSSs$cpm, function(counts, sample) {
 	plus <- counts[strand(counts) == "+"]
@@ -511,24 +414,12 @@ Heatmap(corr_matrix, col = viridis(256), heatmap_legend_param = list(title = "PC
 )
 dev.off()
 
-# Annotate TSRs
-exp <- annotate_features(exp, annotation_file = annotation, data_type = "tsr", feature_type = "transcript")
-
-# Determine TSR distribution relative to genomic features
-tsr_distribution <- genomic_distribution(exp, data_type = "tsr", threshold = 3, 
-                                         samples = diamide)
-
-p <- plot_genomic_distribution(tsr_distribution, sample_order = diamide) +
-    ggplot2::theme(text = element_text(size = 12), legend.key.size = unit(0.6, "cm"), axis.text = element_text(color="black"))
-
-ggsave(file.path(diamide_dir, "tsr_genomic_distribution.pdf"), plot = p, device = cairo_pdf, height = 4, width = 6)
-
 # Export TSR beds
 iwalk(exp@counts$TSRs$cpm, function(counts, sample) {
     export(counts, file.path(bedgraph_dir, paste(sample, "TSRs.bed", sep = "_")), format = "bed")
 })
 
-# Differential TSR (dTSR) analysis
+# Differential TSR analysis
 edger_model <- fit_edger_model(
     exp,
     data_type = "tsr", 
@@ -545,13 +436,13 @@ edger_model <- fit_edger_model(
 
 diff_tsrs <- differential_expression(edger_model, data_type = "tsr", compare_groups = c(1, 2))
 
-# Write dTSRs to a table
+# Write differential TSRs to a table
 diff_tsrs %>% 
     filter(abs(log2FC) >= 1, FDR <= 0.05) %>%
     write.table(file.path(diamide_dir, "diff_tsrs.tsv"),
                 sep = "\t", col.names = TRUE, row.names = FALSE, quote = FALSE)
 
-# Annotate dTSRs
+# Annotate differential TSRs
 annotated_diff_tsrs <- annotate_differential(diff_tsrs, annotation_file = annotation, 
                                                   feature_type = "transcript", 
                                                   upstream = 250, downstream = 100)
@@ -565,7 +456,7 @@ annotated_diff_tsrs %>%
 promoter_diff_tsrs <- annotated_diff_tsrs %>% 
     filter(annotation == "Promoter", abs(log2FC) >= 1, FDR <= 0.05)
 
-# Count dTSRs
+# Count differential TSRs
 diff_tsrs %>%
     mutate(change = case_when(
         log2FC >= 1 & FDR <= 0.05 ~ "increased",
@@ -573,7 +464,7 @@ diff_tsrs %>%
         TRUE ~ "unchanged")) %>%
     dplyr::count(change)
 
-# Count promoter dTSRs
+# Count promoter differential TSRs
 annotated_diff_tsrs %>% 
     filter(annotation == "Promoter") %>%
     mutate(change = case_when(
@@ -582,13 +473,13 @@ annotated_diff_tsrs %>%
         TRUE ~ "unchanged")) %>%
     dplyr::count(change)
 
-# Make a volcano plot of dTSRs
+# Make a volcano plot of differential TSRs
 p <- plot_volcano(diff_tsrs, size = 0.25) + 
     ggplot2::theme(text = element_text(size = 12), axis.text = element_text(color="black"))
 
 ggsave(file.path(diamide_dir, "diff_tsrs_volcano_plot.pdf"), plot = p, device = cairo_pdf, height = 2.5, width = 5)
 
-# Perform GO analysis
+# Perform GO analysis of promoter-associated differential TSRs
 enrichment_data <- export_for_enrichment(promoter_diff_tsrs)
 
 go_enrichment <- clusterProfiler::compareCluster(

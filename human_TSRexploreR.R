@@ -88,13 +88,6 @@ if (!dir.exists(stripe_dir)){
 # Normalize TSS counts
 exp <- count_normalization(exp, data_type = "tss", threshold = 3, n_samples = 1, samples = stripe)
 
-# Generate a combinbed TSS correlation plot
-# p <- plot_correlation(exp, data_type = "tss", font_size = 4, pt_size = 0.5) +
-#     ggplot2::theme_bw() +
-#     ggplot2::theme(text = element_text(size = 6))
-# 
-# ggsave(file.path(stripe_dir, "tss_correlation.png"), plot = p, device = "png", type = "cairo", height = 4, width = 4)
-
 # Generate a hierarchically clustered TSS heatmap with correlation values displayed
 corr_matrix <- find_correlation(exp, data_type = "tss", correlation_metric = "pearson", samples = stripe)
 
@@ -138,16 +131,7 @@ p <- plot_genomic_distribution(genomic_dist) +
 
 ggsave(file.path(stripe_dir, "tss_genomic_distribution_quantiles.pdf"), plot = p, device = cairo_pdf, height = 4, width = 6)
 
-# # Plot number of promoter-proximal features with a TSS
-# features <- detect_features(exp, data_type = "tss", feature_type = "transcript", threshold = 3, 
-#                             samples = stripe)
-# 
-# p <- plot_detected_features(features, ncol = 3, width = 0.75) +
-#     ggplot2::theme(text = element_text(size = 14), legend.key.size = unit(0.8, "cm"))
-# 
-# ggsave(file.path(stripe_dir, "tss_feature_plot.pdf"), plot = p, device = cairo_pdf, height = 1.5, width = 8)
-
-# Generate TSS density plots
+# Generate TSS density plot
 p <- plot_average(exp, data_type = "tss", threshold = 3, samples = "K562_100ng_1", upstream = 1000, downstream = 1000) +
     ggplot2::theme(text = element_text(size = 13))
 
@@ -194,22 +178,6 @@ p <- plot_dinucleotide_frequencies(frequencies, ncol = 1) +
 
 ggsave(file.path(stripe_dir, "tss_dinucleotide_frequencies_rep1.pdf"), plot = p, device = cairo_pdf, height = 3, width = 3.8)
 
-# Plot distance of dominant TSS to annotated start codon
-dominant <- dominant_tss(exp, threshold = 3, feature_type = "geneId", samples = "K562_100ng_1")
-
-p <- plot_dominant_tss(dominant) +
-	theme(text = element_text(size = 12))
-
-ggsave(file.path(stripe_dir, "dominant_tss.pdf"), plot = p, device = cairo_pdf, height = 3, width = 3)
-
-# Plot hypothetical maximum 5'UTR length
-max <- max_utr(exp, threshold = 3, feature_type = "geneId", samples = "K562_100ng_1")
-
-p <- plot_max_utr(max) +
-	theme(text = element_text(size = 12))
-
-ggsave(file.path(stripe_dir, "max_utr.pdf"), plot = p, device = cairo_pdf, height = 3, width = 3)
-
 # Export normalized TSS bedGraphs
 
 bedgraph_dir <- file.path("human_work", "bedgraphs")
@@ -231,66 +199,6 @@ iwalk(exp@counts$TSSs$cpm, function(counts, sample) {
 
 # Normalize TSR counts
 exp <- count_normalization(exp, data_type = "tsr", threshold = 3, n_samples = 1, samples = stripe)
-
-# Generate a combinbed TSR correlation plot
-# p <- plot_correlation(exp, data_type = "tsr", font_size = 3, pt_size = 0.5) +
-#     ggplot2::theme_bw() +
-#     ggplot2::theme(text = element_text(size = 6))
-# 
-# ggsave(file.path(stripe_dir, "tsr_correlation.png"), plot = p, device = "png", type = "cairo", height = 3, width = 3)
-
-# Generate a hierarchically clustered TSR heatmap
-# corr_matrix <- find_correlation(exp, data_type = "tsr", correlation_metric = "pearson")
-# 
-# cairo_pdf(file = file.path(stripe_dir, "tsr_correlation_hierarchical.pdf"), width = 4, height = 4)
-# Heatmap(corr_matrix, col = viridis(256), heatmap_legend_param = list(title = "PCC"), 
-#         layer_fun = function(j, i, x, y, width, height, fill)
-#         {
-#             grid.text(sprintf("%.3f", pindex(corr_matrix, i, j)), x, y, gp = gpar(fontsize = 12, col = "white"))
-#         }
-# )
-# dev.off()
-
-# Annotate TSRs
-exp <- annotate_features(exp, annotation_file = "human_data/Homo_sapiens.GRCh38.98.chr.gtf",
-                         data_type = "tsr", feature_type = "transcript", upstream = 500, downstream = 500)
-
-# Determine TSR distribution relative to genomic features
-tsr_distribution <- genomic_distribution(exp, data_type = "tsr", threshold = 3, samples = "K562_100ng_1")
-
-p <- plot_genomic_distribution(tsr_distribution) +
-    ggplot2::theme(text = element_text(size = 14), legend.key.size = unit(0.8, "cm"))
-
-ggsave(file.path(stripe_dir, "tsr_genomic_distribution.pdf"), plot = p, device = cairo_pdf, height = 2, width = 6)
-
-tsr_distribution <- genomic_distribution(exp, data_type = "tsr", threshold = 3, quantiles = 5, 
-                                         samples = "K562_100ng_1")
-
-p <- plot_genomic_distribution(tsr_distribution) +
-    ggplot2::theme(text = element_text(size = 14), legend.key.size = unit(0.8, "cm"))
-
-ggsave(file.path(stripe_dir, "tsr_genomic_distribution_quantiles.pdf"), plot = p, device = cairo_pdf, height = 5, width = 6)
-
-# Plot number of promoter-proximal features with a TSR
-features <- detect_features(exp, data_type = "tsr", feature_type = "transcript", samples = "K562_100ng_1")
-
-p <- plot_detected_features(features, width = 0.75) +
-    ggplot2::theme(text = element_text(size = 14), legend.key.size = unit(0.8, "cm"))
-
-ggsave(file.path(stripe_dir, "tsr_feature_plot.pdf"), plot = p, device = cairo_pdf, height = 1.5, width = 5)
-
-# Plot selected TSR metrics
-# p <- plot_tsr_metric(exp, tsr_metrics = "nTSSs", log2_transform = TRUE, ncol = 1, plot_type = "boxjitter",
-#                      size = 0.5, samples = "K562_100ng_1") +
-#     ggplot2::theme(text = element_text(size = 14), legend.key.size = unit(0.8, "cm"))
-# 
-# ggsave(file.path(stripe_dir, "tsr_metrics.pdf"), plot = p, device = cairo_pdf, width = 3.5, height = 4)
-
-# Generate TSR average plot
-p <- plot_average(exp, data_type = "tsr", samples = "K562_100ng_1", upstream = 1000, downstream = 1000) +
-    ggplot2::theme(text = element_text(size = 12))
-
-ggsave(file.path(stripe_dir, "tsr_average_plot.pdf"), plot = p, device = cairo_pdf, height = 3, width = 3)
 
 # Export TSR beds
 iwalk(exp@counts$TSRs$cpm, function(counts, sample) {
@@ -328,24 +236,6 @@ p <- plot_threshold_exploration(thresh, ncol = 3, point_size = 1.5, sample_order
 
 ggsave(file.path(cage_dir, "tss_thresholds.pdf"), plot = p, device = cairo_pdf, height = 5, width = 10)
 
-# Determine TSS distribution relative to genomic features
-tss_distribution <- genomic_distribution(exp, data_type = "tss", threshold = 3, 
-                                         samples = all)
-
-p <- plot_genomic_distribution(tss_distribution, sample_order = all) +
-    ggplot2::theme(text = element_text(size = 14), legend.key.size = unit(0.8, "cm"))
-
-ggsave(file.path(cage_dir, "tss_genomic_distribution.pdf"), plot = p, device = cairo_pdf, height = 4.5, width = 6)
-
-# Plot number of promoter-proximal features with a TSS
-features <- detect_features(exp, data_type = "tss", feature_type = "transcript", 
-                            samples = all, upstream = 500, downstream = 500)
-
-p <- plot_detected_features(features, ncol = 2, width = 0.75) +
-    ggplot2::theme(text = element_text(size = 14), legend.key.size = unit(0.8, "cm"))
-
-ggsave(file.path(cage_dir, "tss_feature_plot.pdf"), plot = p, device = cairo_pdf, height = 4.5, width = 8)
-
 # Assess TSS dinucleotide frequencies
 frequencies <- dinucleotide_frequencies(exp, genome_assembly = "human_data/Homo_sapiens.GRCh38.dna_sm.primary_assembly.fa",
                                         threshold = 3, samples = all)
@@ -370,48 +260,10 @@ iwalk(exp@counts$TSSs$cpm, function(counts, sample) {
 # Normalize TSR counts
 exp <- count_normalization(exp, data_type = "tsr", threshold = 3, n_samples = 1, samples = all)
 
-# # Generate a combinbed TSR correlation plot
-# p <- plot_correlation(exp, data_type = "tsr", correlation_metric = "spearman", font_size = 2, pt_size = 0.5) +
-#     ggplot2::theme_bw() +
-#     ggplot2::theme(text = element_text(size = 6))
-
-ggsave(file.path(cage_dir, "tsr_correlation.png"), plot = p, device = "png", type = "cairo", height = 6, width = 6)
-
-# Generate a hierarchically clustered TSR heatmap with correlation values displayed
-# corr_matrix <- find_correlation(exp, data_type = "tsr", correlation_metric = "spearman")
-# 
-# cairo_pdf(file = file.path(cage_dir, "tsr_correlation_hierarchical.pdf"), width = 12, height = 12)
-# Heatmap(corr_matrix, col = viridis(256), heatmap_legend_param = list(title = "Spearman"), 
-#         layer_fun = function(j, i, x, y, width, height, fill)
-#         {
-#             grid.text(sprintf("%.3f", pindex(corr_matrix, i, j)), x, y, gp = gpar(fontsize = 22, col = "white"))
-#         }
-# )
-# dev.off()
-
-# Annotate TSRs
-exp <- annotate_features(exp, annotation_file = "human_data/Homo_sapiens.GRCh38.98.chr.gtf",
-                         data_type = "tsr", feature_type = "transcript", upstream = 500, downstream = 500)
-
-# Determine TSR distribution relative to genomic features
-tsr_distribution <- genomic_distribution(exp, data_type = "tsr", threshold = 3, 
-                                         samples = all)
-
-p <- plot_genomic_distribution(tsr_distribution, sample_order = all) +
-    ggplot2::theme(text = element_text(size = 12), legend.key.size = unit(0.6, "cm"))
-
-ggsave(file.path(cage_dir, "tsr_genomic_distribution.pdf"), plot = p, device = cairo_pdf, height = 5, width = 6)
-
-# Plot number of promoter-proximal features with a TSR
+# Determine average promoter feature counts and plot
 features <- detect_features(exp, data_type = "tsr", feature_type = "transcript", 
                             samples = all, downstream = 500, upstream = 500)
 
-p <- plot_detected_features(features, ncol = 2, width = 0.75) +
-  ggplot2::theme(text = element_text(size = 14), legend.key.size = unit(0.8, "cm"))
-
-ggsave(file.path(cage_dir, "tsr_feature_plot.pdf"), plot = p, device = cairo_pdf, height = 4.5, width = 6.5)
-
-# Determine average promoter feature counts and plot
 p <- features %>% 
     add_column(technology = c(rep("CAGE", 2), rep("STRIPE", 3), "nanoCAGEXL", rep("RAMPAGE", 2))) %>%
     mutate(technology = factor(technology, levels=c("STRIPE", "CAGE", "RAMPAGE", "nanoCAGEXL"))) %>%
