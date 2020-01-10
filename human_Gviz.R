@@ -8,7 +8,7 @@ library(scales)
 
 gviz_dir <- file.path("human_work", "Gviz")
 bedgraph_dir <- file.path("human_work", "bedgraphs")
-rnaseq_dir <- file.path("human_work", "RNA_seq")
+rnaseq_dir <- file.path("human_data", "RNA_seq")
 distal_tsr_dir <- file.path("human_work", "distal_TSRs")
 
 if (!dir.exists(gviz_dir)) {
