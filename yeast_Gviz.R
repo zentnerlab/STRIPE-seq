@@ -103,10 +103,10 @@ ypd_rnaseq_1_neg <- DataTrack(range = file.path(rnaseq_dir, "RNASEQ001_S288C_unt
                               name = "YPD RNA-seq 1 minus", col.histogram = "#FDE725FF", fill.histogram = "#FDE725FF", ylim = rnaseq_neg_lim)
 
 # Diamide RNA-seq
-diamide_rnaseq_1_pos <- DataTrack(range = file.path(rnaseq_dir, "RNASEQ009_S288C_diamide_r2.CPM.bs1.smooth25.plus.bw"), genome = "sacCer3", 
-                              name = "YPD RNA-seq 1 plus", col.histogram = "#22A884FF", fill.histogram = "#22A884FF", ylim = rnaseq_pos_lim)
-diamide_rnaseq_1_neg <- DataTrack(range = file.path(rnaseq_dir, "RNASEQ009_S288C_diamide_r2.CPM.bs1.smooth25.minus.bw"), genome = "sacCer3", 
-                              name = "YPD RNA-seq 1 minus", col.histogram = "#22A884FF", fill.histogram = "#22A884FF", ylim = rnaseq_neg_lim)
+diamide_rnaseq_1_pos <- DataTrack(range = file.path(rnaseq_dir, "RNASEQ007_S288C_diamide_r2.CPM.bs1.smooth25.plus.bw"), genome = "sacCer3", 
+                              name = "Diamide RNA-seq 1 plus", col.histogram = "#22A884FF", fill.histogram = "#22A884FF", ylim = rnaseq_pos_lim)
+diamide_rnaseq_1_neg <- DataTrack(range = file.path(rnaseq_dir, "RNASEQ007_S288C_diamide_r2.CPM.bs1.smooth25.minus.bw"), genome = "sacCer3", 
+                              name = "Diamide RNA-seq 1 minus", col.histogram = "#22A884FF", fill.histogram = "#22A884FF", ylim = rnaseq_neg_lim)
 
 # Ribosome profiling
 S288C_riboseq_1_pos <- DataTrack(range = file.path(riboseq_dir, "GSM1949550_rep1_positive.wig"), genome = "sacCer3",
