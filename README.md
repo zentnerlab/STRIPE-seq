@@ -15,7 +15,7 @@ Clone the ChIPseq automation repository. Navigate to a directory you would like 
 
 2. *_promoter_correlation.R scripts quantify signal in promoter windows and perform correlation analysis.
 
-3. *_Gviz.R scripts load signal tracks for TSS mapping methods as well as RNA-seq, Ribo-seq (for yeast), and CUT&Tag (for human) and displays them at the specific genomic regions.
+3. *_Gviz.R scripts load signal tracks for TSS mapping methods as well as RNA-seq, Ribo-seq (for yeast), and CUT&Tag (for human) and displays them at the specified genomic regions.
 
 4. distal_TSR_analysis.R retrieves TSS-proximal and TSS-distal TSRs a specified distance from an annotated human TSS. It also calculates the overlap of proximal and distal TSRs with enhancer annotations from EnhancerAtlas 2.0 and performs statistical comparison of overlaps with a chi-square test.
 
