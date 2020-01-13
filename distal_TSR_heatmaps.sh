@@ -67,7 +67,6 @@ $CNTBWDIR/IgG_merged.spikenorm.bw \
 plotHeatmap \
 -m distal_tsr_histone_matrix_cutntag \
 -o distal_tsr_histone_matrix_cutntag.pdf \
---colorMap Greys \
 --sortUsingSamples 1 \
 --heatmapHeight 8 \
 --colorMap viridis \
