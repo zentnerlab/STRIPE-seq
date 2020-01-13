@@ -297,14 +297,6 @@ p <- plot_threshold_exploration(thresh, ncol = 3, point_size = 2, sample_order =
 
 ggsave(file.path(cage_dir, "tss_thresholds.pdf"), plot = p, device = cairo_pdf, height = 8, width = 11)
 
-# Determine TSS distribution relative to genomic features
-tss_distribution <- genomic_distribution(exp, data_type = "tss", threshold = 3, samples = all)
-
-p <- plot_genomic_distribution(tss_distribution, sample_order = cage) +
-    ggplot2::theme(text = element_text(size = 14), legend.key.size = unit(0.8, "cm"), axis.text = element_text(color="black"))
-
-ggsave(file.path(cage_dir, "tss_genomic_distribution.pdf"), plot = p, device = cairo_pdf, height = 6, width = 6)
-
 # Print all TSS dinucleotide frequencies
 frequencies <- dinucleotide_frequencies(exp, genome_assembly = assembly, threshold = 3, samples = all)
 
@@ -333,10 +325,8 @@ iwalk(exp@counts$TSSs$cpm, function(counts, sample) {
 # Normalize TSR counts
 exp <- count_normalization(exp, data_type = "tsr", threshold = 3, n_samples = 1, samples = all)
 
-p <- plot_detected_features(features, ncol = 3, width = 0.75) +
-    ggplot2::theme(text = element_text(size = 10), legend.key.size = unit(0.8, "cm"), axis.text = element_text(color="black"))
-
-ggsave(file.path(cage_dir, "tsr_feature_plot.pdf"), plot = p, device = cairo_pdf, height = 10, width = 10)
+# Annotate TSRs
+exp <- annotate_features(exp, annotation_file = annotation, data_type = "tsr", feature_type = "transcript")
 
 # Determine average promoter feature counts and plot
 features <- detect_features(exp, data_type = "tsr", feature_type = "transcript", samples = all)
