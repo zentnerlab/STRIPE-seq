@@ -260,6 +260,10 @@ iwalk(exp@counts$TSSs$cpm, function(counts, sample) {
 # Normalize TSR counts
 exp <- count_normalization(exp, data_type = "tsr", threshold = 3, n_samples = 1, samples = all)
 
+# Annotate TSRs
+exp <- annotate_features(exp, annotation_file = "human_data/Homo_sapiens.GRCh38.98.chr.gtf",
+                         data_type = "tsr", feature_type = "transcript", upstream = 500, downstream = 500)
+
 # Determine average promoter feature counts and plot
 features <- detect_features(exp, data_type = "tsr", feature_type = "transcript", 
                             samples = all, downstream = 500, upstream = 500)
