@@ -47,8 +47,8 @@ rampage_neg_lim <- c(0,20)
 nanocage_pos_lim <- c(0,5)
 nanocage_neg_lim <- c(0,5)
 
-rnaseq_pos_lim <- c(0,1)
-rnaseq_neg_lim <- c(0,1)
+rnaseq_pos_lim <- c(0,3)
+rnaseq_neg_lim <- c(0,3)
 
 h3k4cnt_lim <- c(0,50)
 h3k27cnt_lim <- c(0,0.5)
