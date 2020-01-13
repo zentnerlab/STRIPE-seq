@@ -37,7 +37,7 @@ show_col(viridis_pal()(20))
 
 # Set y-axis limits
 stripe_pos_lim <- c(0,250)
-stripe_neg_lim <- c(0,250)
+stripe_neg_lim <- c(0,150)
 
 slic_pos_lim <- c(0,300)
 slic_neg_lim <- c(0,300)
