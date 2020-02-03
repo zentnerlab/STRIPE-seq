@@ -97,4 +97,4 @@ colnames(observed_table) <- c("enhancer", "non-enhancer")
 
 # Perform chi-square test
 X <- chisq.test(observed_table)
-pchisq(679.3, df = 1, lower.tail = F)
+pchisq(round(X$statistic, digits = 1), df = 1, lower.tail = F)
