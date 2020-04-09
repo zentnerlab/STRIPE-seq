@@ -4,6 +4,7 @@ library(tidyverse)
 library(CAGEr)
 library(BSgenome.Scerevisiae.UCSC.sacCer3)
 
+# Note that the newest version of TSRexploreR is required for the syntax in this first part to work
 # devtools::install_github("rpolicastro/tsrexplorer", ref = "clean", force = TRUE)
 
 # STRIPE-seq YPD TSSs
@@ -62,7 +63,7 @@ iwalk(yeast_exp@experiment$TSSs, function(x,y) {x %>% as.data.frame %>% select(-
 ### CAGEr time ###
 ##################
 
-TSSs_for_CAGEr <- list.files("cage_tss", full.names = TRUE)
+TSSs_for_CAGEr <- list.files("cager_tss", full.names = TRUE)
 
 samples <- make.names(TSSs_for_CAGEr)
 
