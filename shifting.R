@@ -89,9 +89,6 @@ myCAGEset <- new("CAGEset", genomeName = "BSgenome.Scerevisiae.UCSC.sacCer3",
                  
 getCTSS(myCAGEset)
 
-ctss <- CTSStagCount(myCAGEset)
-head(ctss)
-
 mergeSamples(myCAGEset, mergeIndex = c(1,1,1,2,2,2),
              mergedSampleLabels = c("control", "diamide"))
 
@@ -107,15 +104,6 @@ clusterCTSS(object = myCAGEset, threshold = 1, thresholdIsTpm = TRUE,
 cumulativeCTSSdistribution(myCAGEset, clusters = "tagClusters")
 quantilePositions(myCAGEset, clusters = "tagClusters", qLow = 0.1, qUp = 0.9)
 
-tc <- tagClusters(myCAGEset, sample = "control",
-                  returnInterquantileWidth = TRUE, qLow = 0.1, qUp = 0.9)
-
-exportToBed(object = myCAGEset, what = "tagClusters",
-            qLow = 0.1, qUp = 0.9, oneFile = TRUE)
-
-plotInterquantileWidth(myCAGEset, clusters = "tagClusters",
-                       tpmThreshold = 3, qLow = 0.1, qUp = 0.9)
-
 aggregateTagClusters(myCAGEset, tpmThreshold = 3,
                      qLow = 0.1, qUp = 0.9, maxDist = 100)
 
@@ -128,7 +116,5 @@ shifting.promoters <- getShiftingPromoters(myCAGEset,
                                            tpmThreshold = 5,
                                            fdrThreshold = 1e-10,
                                            scoreThreshold = -Inf)
-
-head(shifting.promoters)
 
 write.table(shifting.promoters, "shifting_tsrs.txt", sep = "\t", row.names = F, col.names = T, quote = F)
