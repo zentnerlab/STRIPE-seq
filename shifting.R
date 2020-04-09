@@ -107,6 +107,8 @@ quantilePositions(myCAGEset, clusters = "tagClusters", qLow = 0.1, qUp = 0.9)
 aggregateTagClusters(myCAGEset, tpmThreshold = 3,
                      qLow = 0.1, qUp = 0.9, maxDist = 100)
 
+consensusCl <- consensusClusters(myCAGEset)
+
 cumulativeCTSSdistribution(myCAGEset, clusters = "consensusClusters")
 
 scoreShift(myCAGEset, groupX = "control", groupY = "diamide",
@@ -114,7 +116,7 @@ scoreShift(myCAGEset, groupX = "control", groupY = "diamide",
 
 shifting.promoters <- getShiftingPromoters(myCAGEset,
                                            tpmThreshold = 5,
-                                           fdrThreshold = 1e-10,
-                                           scoreThreshold = -Inf)
+                                           fdrThreshold = 0.01,
+                                           scoreThreshold = 0.6)
 
 write.table(shifting.promoters, "shifting_tsrs.txt", sep = "\t", row.names = F, col.names = T, quote = F)
