@@ -55,9 +55,24 @@ yeast_exp <- format_counts(yeast_exp, data_type = "tss")
 
 yeast_exp <- format_counts(yeast_exp, data_type = "tsr")
 
+# Write STRIPE-seq TSSs to CTSS format
 iwalk(yeast_exp@experiment$TSSs, function(x,y) {x %>% as.data.frame %>% select(-width, -end, -nTAGs, -isreal) %>% 
     mutate(seqnames = str_c("chr", seqnames)) %>%
     write.table(str_c(y, ".txt"), col.names = FALSE, quote = FALSE, sep = "\t", row.names = FALSE)})
+
+# Group YPD 100 ng and YPD + diamide STRIPE-seq samples
+diamide <- c("S288C_100ng_1.txt","S288C_100ng_2.txt","S288C_100ng_3.txt",
+             "S288C_diamide_100ng_1.txt","S288C_diamide_100ng_2.txt","S288C_diamide_100ng_3.txt")
+
+# Copy 100 ng control and diamide CTSS files to a new directory
+if (!dir.exists("cager_tss")){
+  message("Creating directory 'cager_tss'...")
+  dir.create("cager_tss")
+} else {
+  message("Directory 'cager_tss' already exists...")
+}
+
+file.copy(diamide, "cager_tss/", overwrite = TRUE)
 
 ##################
 ### CAGEr time ###
@@ -84,8 +99,6 @@ plotReverseCumulatives(myCAGEset, fitInRange = c(5, 1000), onePlot = TRUE)
                                       
 normalizeTagCount(myCAGEset, method = "powerLaw",
                   fitInRange = c(5, 1000), alpha = 1.93, T = 1e6)                 
-
-exportCTSStoBedGraph(myCAGEset, values = "normalized", oneFile = TRUE)
 
 clusterCTSS(object = myCAGEset, threshold = 1, thresholdIsTpm = TRUE,
             nrPassThreshold = 1, method = "distclu", maxDist = 40,
@@ -118,4 +131,4 @@ shifting.promoters <- getShiftingPromoters(myCAGEset,
 
 head(shifting.promoters)
 
-write.table(shifting.promoters, "shift.txt", sep = "\t", row.names = F, col.names = T, quote = F)
+write.table(shifting.promoters, "shifting_tsrs.txt", sep = "\t", row.names = F, col.names = T, quote = F)
