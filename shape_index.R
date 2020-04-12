@@ -107,7 +107,7 @@ yeast_df <- bind_rows(yeast_exp@counts$TSRs$raw, .id = "sample")
 
 yeast_df <- filter(yeast_df, score >= 10)
 
-count(yeast_df, sample, shape_class) %>%
+dplyr::count(yeast_df, sample, shape_class) %>%
   group_by(sample) %>%
   mutate(total = sum(n)) %>%
   mutate(percent = round(n / total * 100, 2)) %>%
@@ -201,7 +201,7 @@ human_df <- bind_rows(human_exp@counts$TSRs$raw, .id = "sample")
 
 human_df <- filter(human_df, score >= 10)
 
-count(human_df, sample, shape_class) %>%
+dplyr::count(human_df, sample, shape_class) %>%
   group_by(sample) %>%
   mutate(total = sum(n)) %>%
   mutate(percent = round(n / total * 100, 2)) %>%
