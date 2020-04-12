@@ -7,6 +7,8 @@ library(BSgenome.Scerevisiae.UCSC.sacCer3)
 # Note that the newest version of TSRexploreR is required for the syntax in this first part to work
 # devtools::install_github("rpolicastro/tsrexplorer", ref = "clean", force = TRUE)
 
+# Read YPD and diamide 100 ng STRIPE-seq TSSs into variables
+
 # STRIPE-seq YPD TSSs
 YPD_TSSs <- map(list.files("yeast_data/YPD_TSSs/", full.names = TRUE), ~ read.delim(.x) %>%
                   makeGRangesFromDataFrame(keep.extra.columns = TRUE, seqnames.field = "seq", 
@@ -24,36 +26,13 @@ diamide_TSSs <- map(list.files("yeast_data/diamide_TSSs/", full.names = TRUE), ~
 # Generate list of all TSS objects
 full_TSS_set <- c(YPD_TSSs, diamide_TSSs)
 
-####################
-### Read in TSRs ###
-####################
-
-# STRIPE-seq YPD TSRs
-YPD_TSRs <- map(list.files("yeast_data/YPD_TSRs/", full.names = TRUE), ~ read.delim(.x) %>%
-                  makeGRangesFromDataFrame(keep.extra.columns = TRUE, seqnames.field = "seq", 
-                                           start.field = "start", end.field = "end")) %>%
-  set_names(c("S288C_50ng_1","S288C_50ng_2","S288C_50ng_3",
-              "S288C_100ng_1","S288C_100ng_2","S288C_100ng_3",
-              "S288C_250ng_1","S288C_250ng_2","S288C_250ng_3"))
-
-# STRIPE-seq diamide TSRs
-diamide_TSRs <- map(list.files("yeast_data/diamide_TSRs/", full.names = TRUE), ~ read.delim(.x) %>%
-                      makeGRangesFromDataFrame(keep.extra.columns = TRUE, seqnames.field = "seq", 
-                                               start.field = "start", end.field = "end")) %>%
-  set_names(c("S288C_diamide_100ng_1","S288C_diamide_100ng_2","S288C_diamide_100ng_3"))
-
-# Generate list of all TSR objects
-full_TSR_set <- c(YPD_TSRs, diamide_TSRs)
-
+# Add a "score" column to TSS GRanges (duplication and column renaming of TSRchitect "nTAGs" column)
 full_TSS_set <- lapply(full_TSS_set, function(x) {x$score <- x$nTAGs; return(x)})
 
-full_TSR_set <- lapply(full_TSR_set, function(x) {x$score <- x$nTAGs; return(x)})
-
-yeast_exp <- tsr_explorer(full_TSS_set, full_TSR_set)
+# Read TSSs and TSRs into TSRexploreR and prepare them for analysis
+yeast_exp <- tsr_explorer(full_TSS_set)
 
 yeast_exp <- format_counts(yeast_exp, data_type = "tss")
-
-yeast_exp <- format_counts(yeast_exp, data_type = "tsr")
 
 # Write STRIPE-seq TSSs to CTSS format
 iwalk(yeast_exp@experiment$TSSs, function(x,y) {x %>% as.data.frame %>% select(-width, -end, -nTAGs, -isreal) %>% 
@@ -74,10 +53,7 @@ if (!dir.exists("cager_tss")){
 
 file.copy(diamide, "cager_tss/", overwrite = TRUE)
 
-##################
-### CAGEr time ###
-##################
-
+# Read CTSS files into a CAGEr CAGEset object
 TSSs_for_CAGEr <- list.files("cager_tss", full.names = TRUE)
 
 samples <- make.names(TSSs_for_CAGEr)
@@ -89,21 +65,27 @@ myCAGEset <- new("CAGEset", genomeName = "BSgenome.Scerevisiae.UCSC.sacCer3",
                  
 getCTSS(myCAGEset)
 
+# Merge control and diamide replicate samples
 mergeSamples(myCAGEset, mergeIndex = c(1,1,1,2,2,2),
              mergedSampleLabels = c("control", "diamide"))
 
+# Determine alpha for power-law normalization
 plotReverseCumulatives(myCAGEset, fitInRange = c(5, 1000), onePlot = TRUE)
                                       
+# Normalize samples
 normalizeTagCount(myCAGEset, method = "powerLaw",
                   fitInRange = c(5, 1000), alpha = 1.93, T = 1e6)                 
 
+# Generate CTSS clusters
 clusterCTSS(object = myCAGEset, threshold = 1, thresholdIsTpm = TRUE,
             nrPassThreshold = 1, method = "distclu", maxDist = 40,
             removeSingletons = TRUE, keepSingletonsAbove = 3)
 
+# Get signal within clusters
 cumulativeCTSSdistribution(myCAGEset, clusters = "tagClusters")
 quantilePositions(myCAGEset, clusters = "tagClusters", qLow = 0.1, qUp = 0.9)
 
+# Combine tag clusters
 aggregateTagClusters(myCAGEset, tpmThreshold = 3,
                      qLow = 0.1, qUp = 0.9, maxDist = 100)
 
@@ -111,9 +93,11 @@ consensusCl <- consensusClusters(myCAGEset)
 
 cumulativeCTSSdistribution(myCAGEset, clusters = "consensusClusters")
 
+# Calculate shifting score
 scoreShift(myCAGEset, groupX = "control", groupY = "diamide",
            testKS = TRUE, useTpmKS = FALSE)
 
+# Filter shifted tag clusters and write to a table
 shifting.promoters <- getShiftingPromoters(myCAGEset,
                                            tpmThreshold = 5,
                                            fdrThreshold = 0.01,
