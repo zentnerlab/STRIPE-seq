@@ -5,7 +5,7 @@ The scripts and data contained in this repository can be used to reproduce the m
 
 ## Cloning Repository
 
-Clone the ChIPseq automation repository. Navigate to a directory you would like to clone the repository to and enter  
+Navigate to a directory you would like to clone the repository to and enter  
 `git clone https://github.com/zentnerlab/stripeseq.git`
 
 ## Script overviews
