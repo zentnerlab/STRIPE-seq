@@ -1,9 +1,7 @@
 # STRIPE-seq analysis
 
 ## About
-The scripts and data contained in this repository can be used to reproduce the majority of the images found in the STRIPE-seq publication. TSS bedgraphs, TSR beds, and RNA-seq bigwigs are available from GEO (GSE142524).
-
-The state of the repository as used in Policastro et al (2020) is maintained in the release "policastro_etal_2020" and tagged as v1.0.
+The scripts and data contained in this repository can be used to reproduce the majority of the images found in the original STRIPE-seq publication (Policastro et al (2020) *Genome Res*, in press. TSS bedgraphs, TSR beds, and RNA-seq bigwigs are available from GEO (GSE142524).
 
 ## Cloning Repository
 
