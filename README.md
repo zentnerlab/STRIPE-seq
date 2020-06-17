@@ -5,7 +5,7 @@ This repository contains scripts and data files for the analysis of STRIPE-seq d
 
 ## Cloning Repository
 Navigate to a directory to which you would like to clone the repository and enter  
-`git clone https://github.com/zentnerlab/stripeseq.git`
+`git clone https://github.com/zentnerlab/STRIPE-seq.git`
 
 ## Contents
 [Policastro_etal_2020](https://github.com/zentnerlab/STRIPE-seq/tree/master/Policastro_etal_2020) contains scripts and data files from:  
