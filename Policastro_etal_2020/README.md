@@ -8,7 +8,7 @@ The state of the repository as used in Policastro et al (2020) is maintained in 
 ## Cloning Repository
 
 Navigate to a directory you would like to clone the repository to and enter  
-`git clone https://github.com/zentnerlab/stripeseq.git`
+`git clone https://github.com/zentnerlab/STRIPE-seq.git`
 
 ## Script overviews
 
