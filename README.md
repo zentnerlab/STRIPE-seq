@@ -9,4 +9,4 @@ Navigate to a directory to which you would like to clone the repository and ente
 
 ## Contents
 [Policastro_etal_2020](https://github.com/zentnerlab/STRIPE-seq/tree/master/Policastro_etal_2020) contains scripts and data files from:  
-Policastro RA, Raborn RT, Brendel VP, Zentner GE (2020). Simple and efficient profiling of transcription initiation and transcript levels with STRIPE-seq. *Genome Res*, in press.
+Policastro RA, Raborn RT, Brendel VP, Zentner GE (2020). Simple and efficient profiling of transcription initiation and transcript levels with STRIPE-seq. *Genome Res* 30(6):910-923 | [Pubmed](https://pubmed.ncbi.nlm.nih.gov/32660958/).
